@@ -1,0 +1,398 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOVA | Fashion Excellence</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="icon" href="{% static 'img/icon.png' %}">
+</head>
+
+<body>
+
+    {% if messages %}
+
+<div class="position-fixed top-0 end-0 p-3"
+     style="z-index:9999; margin-top:70px; width:350px;">
+
+    {% for message in messages %}
+
+    <div class="custom-alert alert alert-success shadow mb-3"
+         role="alert">
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <span>{{ message }}</span>
+
+            <button type="button"
+                    class="btn-close btn-close-white ms-3"
+                    onclick="this.parentElement.parentElement.remove();">
+            </button>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid px-lg-5"> <a class="navbar-brand" href="/">NOVA</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+
+                    <li class="nav-item dropdown position-static">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Men</a>
+                        <div class="dropdown-menu w-100 mega-menu border-0 shadow">
+                            <div class="container">
+                                <div class="row p-4">
+                                    <div class="col-md-3">
+                                        <h6>Clothing</h6>
+                                        <a href="{% url 'product_page' 'Men' 'Tshirt' %}">T-Shirts</a>
+                                        <a href="{% url 'product_page' 'Men' 'Shirt' %}">Shirts</a>
+                                        <a href="{% url 'product_page' 'Men' 'Jeans' %}">Jeans</a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h6>Accessories</h6>
+                                        <a href="{% url 'product_page' 'Men' 'Watches' %}">Watches</a>
+                                        <a href="{% url 'product_page' 'Men' 'Perfumes' %}">Perfumes</a>
+                                        <a href="{% url 'product_page' 'Men' 'Hats' %}">Hats</a>
+                                    </div>
+                                    <div class="col-md-6 d-none d-md-block text-end">
+                                        <img src="https://i0.wp.com/peacockblue.co.za/wp-content/uploads/2020/04/pb-stellenbosch-003.jpg?fit=1560%2C1040"
+                                            class="img-fluid rounded" style="max-height: 200px;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown position-static">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Women</a>
+                        <div class="dropdown-menu w-100 mega-menu border-0 shadow">
+                            <div class="container">
+                                <div class="row p-4">
+                                    <div class="col-md-3">
+                                        <h6>Clothing</h6>
+                                        <a href="{% url 'product_page' 'Women' 'Dresses' %}">Dresses</a>
+                                        <a href="{% url 'product_page' 'Women' 'Tops' %}">Tops</a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h6>Accessories</h6>
+                                        <a href="{% url 'product_page' 'Women' 'Heels' %}">Heels</a>
+                                        <a href="{% url 'product_page' 'Women' 'Bags' %}">Bags</a>
+                                        <a href="{% url 'product_page' 'Women' 'Jewellery' %}">Jewelry</a>
+                                    </div>
+                                    <div class="col-md-6 d-none d-md-block text-end">
+                                        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=400&q=80"
+                                            class="img-fluid rounded" style="max-height: 200px;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown position-static">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Kids</a>
+                        <div class="dropdown-menu w-100 mega-menu border-0 shadow">
+                            <div class="container">
+                                <div class="row p-4">
+                                    <div class="col-md-3">
+                                        <h6>Clothing</h6>
+                                        <a href="{% url 'product_page' 'Kids' 'Kidswear' %}">Clothes</a>
+                                        <a href="{% url 'product_page' 'Kids' 'Toys' %}">Toys</a>
+                                        <a href="{% url 'product_page' 'Kids' 'Shoes' %}">Shoes</a>
+                                    </div>
+                                    <div class="col-md-9 d-none d-md-block text-end">
+                                        <img src="https://thebestoflkn.com/wp-content/uploads/2025/01/airlie-baby-birkdale-village-02.jpg"
+                                            class="img-fluid rounded" style="max-height: 200px;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-2 me-lg-5">
+                    <input class="form-control form-control-sm search-box d-none d-sm-block" type="search"
+                        placeholder="Search...">
+                    <a href="/search" class="btn btn-light btn-sm">🔍</a>
+                    <a href="{% url 'cart_view' %}" class="btn btn-light btn-sm position-relative">
+    🛒
+
+    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+        {{ request.user.cart_set.count }}
+    </span>
+</a>
+                    <a href="{% url 'wishlist_view' %}" class="btn btn-light btn-sm">❤️</a>
+                    <a href="{% url 'my_orders' %}" class="btn btn-outline-light">
+    My Orders
+</a>
+
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="username-text mx-2">{{ user.username }}</a>
+                    <a href="{% url 'logout' %}" class="btn btn-danger btn-sm">Logout</a>
+                    {% else %}
+                    <a href="{% url 'signin' %}" class="btn btn-primary btn-sm user-btn">Sign In</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="video-section">
+        <video autoplay muted loop playsinline class="bg-video">
+            <source src="{% static 'img/shopping.mp4' %}" type="video/mp4">
+        </video>
+        <div class="video-overlay">
+            <div class="hero-text-content">
+                <h1>FASHION</h1>
+                <p>Discover the best fashion trends for 2026</p>
+                <button class="shop-btn">Shop Now</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid py-5">
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="sale-card">
+                    <img
+                        src="https://static01.nyt.com/images/2024/11/07/multimedia/28VEN-SPACE-01-pmzv/28VEN-SPACE-01-pmzv-articleLarge.jpg">
+                    <div class="card-overlay">
+                        <h2>MEN SALE</h2>
+                        <p>Up to 50% Off</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="sale-card">
+                    <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c">
+                    <div class="card-overlay">
+                        <h2>WOMEN SALE</h2>
+                        <p>New Collection</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- <section class="container my-5">
+        <h2 class="text-center section-title mb-5">Our Products</h2>
+        <div class="row g-4">
+            {% for product in products %}
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="product-card shadow-sm text-center">
+                    <div class="product-img-box">
+                        <img src="{{ product.image.url }}" class="img-fluid">
+                        <div class="product-overlay">
+                            <button data-bs-toggle="modal" data-bs-target="#modal{{product.id}}">View Product</button>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <h5 class="fw-bold">{{ product.name }}</h5>
+                        <p class="small text-muted">{{ product.description|truncatewords:6 }}</p>
+                        <p class="text-primary fw-bold">₹{{ product.price }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="modal{{product.id}}" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0">
+                        <div class="modal-body p-0 text-center">
+                            <img src="{{ product.image.url }}" class="img-fluid w-100">
+                            <div class="p-4">
+                                <h3>{{ product.name }}</h3>
+                                <p>{{ product.description }}</p>
+                                <h4 class="text-primary">₹{{ product.price }}</h4>
+                                <button class="btn btn-primary rounded-pill px-4 mt-2">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section> -->
+
+    <section class="container my-5">
+        <h2 class="text-center section-title mb-4">Best Offer for You</h2>
+        <div class="row g-3">
+            <div class="col-md-3">
+                <div class="offer-card shadow-sm text-center">
+                    <img src="https://img.freepik.com/free-photo/beautiful-woman-traditional-indian-wear_23-2149400854.jpg"
+                        class="img-fluid">
+                    <div class="p-3">
+                        <h3>Flat ₹999</h3>
+                        <p>Kurtis Collection</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="offer-card shadow-sm text-center">
+                    <img src="https://img.freepik.com/free-vector/modern-buy-one-get-one-free-template-online-retail-store_1017-51004.jpg"
+                        class="img-fluid">
+                    <div class="p-3">
+                        <h3>Buy 1 Get 1</h3>
+                        <p>On Tops</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="offer-card shadow-sm text-center">
+                    <img src="https://content.jdmagicbox.com/comp/def_content_category/ethnic-wear-retailers/bc1a769f3e-ethnic-wear-retailers-2-gyfup.jpg"
+                        class="img-fluid">
+                    <div class="p-3">
+                        <h3>50% OFF</h3>
+                        <p>Women's Dresses</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="offer-card shadow-sm text-center">
+                    <img src="https://img.freepik.com/free-photo/fashion-accessories-set_23-2147679722.jpg"
+                        class="img-fluid">
+                    <div class="p-3">
+                        <h3>30% OFF</h3>
+                        <p>Accessories</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="video-play-section d-flex justify-content-center align-items-center">
+        <a href="https://youtu.be/6uw_czggrtk" target="_blank" class="play-btn">
+            <div class="circle">▶</div>
+        </a>
+    </section>
+
+    <section class="container py-5 overflow-hidden">
+        <div class="row align-items-center">
+            <div class="col-md-4">
+                <h4 class="text-primary">Review</h4>
+                <h2 class="section-title">What Client Say?</h2>
+                <p class="text-muted">Our customers love our products and services.</p>
+            </div>
+            <div class="col-md-8">
+                <div class="slider-wrapper">
+                    <div class="slider d-flex gap-3">
+                        <div class="review-card p-4 shadow-sm border">
+                            <p>"Amazing quality and fast delivery!"</p>
+                            <strong>- Customer A</strong>
+                        </div>
+                        <div class="review-card p-4 shadow-sm border">
+                            <p>"Great collection and affordable prices."</p>
+                            <strong>- Customer B</strong>
+                        </div>
+                        <div class="review-card p-4 shadow-sm border">
+                            <p>"Customer service is top-notch."</p>
+                            <strong>- Customer C</strong>
+                        </div>
+                        <div class="review-card p-4 shadow-sm border">
+                            <p>"Trendy designs and great quality."</p>
+                            <strong>- Customer D</strong>
+                        </div>
+                        <div class="review-card p-4 shadow-sm border">
+                            <p>"Highly recommend this store!"</p>
+                            <strong>- Customer E</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="subscribe-section py-5">
+        <div class="subscribe-box mx-auto shadow text-center p-5">
+            <h2>Subscribe to Our Newsletter</h2>
+            <p class="text-muted">Get latest updates, offers and trends directly in your inbox.</p>
+            <form class="mt-4">
+                <div class="input-group">
+                    <input type="email" class="form-control" placeholder="Enter your email">
+                    <button class="btn btn-primary px-4">Subscribe</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white pt-5 pb-3">
+        <div class="container text-center text-md-start">
+            <div class="row gy-4">
+                <div class="col-md-3">
+                    <h3 class="fw-bold">NOVA</h3>
+                    <p class="text-secondary small">Premium fashion store offering trendy outfits.</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-secondary text-decoration-none">Home</a></li>
+                        <li><a href="#" class="text-secondary text-decoration-none">Shop</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Categories</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-secondary text-decoration-none">Women</a></li>
+                        <li><a href="#" class="text-secondary text-decoration-none">Kids</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Contact</h5>
+                    <p class="text-secondary small">Email: info@nova.com</p>
+                </div>
+            </div>
+            <hr class="border-secondary mt-5">
+            <p class="text-center text-secondary small">© 2026 NOVA Fashion Hub</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            let i = 0;
+            setInterval(function () {
+                i++;
+                if (i > 3) i = 0;
+                $(".slider").css("transform", `translateX(-${i * 50}%)`);
+            }, 3000);
+        });
+
+        setTimeout(() => {
+
+    const alerts = document.querySelectorAll('.custom-alert');
+
+    alerts.forEach(alert => {
+
+        alert.remove();
+
+    });
+
+}, 4000);
+    </script>
+</body>
+
+</html>

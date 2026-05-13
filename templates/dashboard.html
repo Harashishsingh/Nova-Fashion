@@ -1,0 +1,540 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seller Dashboard</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'dashboard.css' %}">
+<link rel="icon" href="{% static 'img/icon.png' %}">
+
+<style>
+  /* Small inline overrides to cleanly match the CSS variables */
+  .section { display: none; }
+  .active-section { display: block; }
+
+  .card h4 { color: #e0f0ff; }
+  .card h5 { color: #e0f0ff; }
+
+  .featured-label {
+    color: #e0f0ff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    padding-top: 14px;
+    cursor: pointer;
+  }
+
+  .featured-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: #00d4ff;
+    cursor: pointer;
+  }
+
+  .coming-soon-text { color: #e0f0ff; margin-top: 8px; }
+  .earnings-text    { color: #e0f0ff; margin-top: 8px; font-size: 18px; font-weight: 600; }
+  .profile-username { color: #e0f0ff; }
+
+  /* Stat card number colours that pair with the CSS border colours */
+  .stat-card.blue  h3 { color: #00d4ff; text-shadow: 0 0 8px rgba(0,212,255,0.6); }
+  .stat-card.green h3 { color: #00ff88; text-shadow: 0 0 8px rgba(0,255,136,0.6); }
+  .stat-card.orange h3 { color: #ff8c00; text-shadow: 0 0 8px rgba(255,107,0,0.6); }
+  .stat-card.purple h3 { color: #bf00ff; text-shadow: 0 0 8px rgba(191,0,255,0.6); }
+
+  .stat-card h6 { color: rgba(200,220,255,0.75); }
+</style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+<!-- ================= SIDEBAR ================= -->
+<div class="sidebar">
+    <h2 class="logo">NOVA</h2>
+
+    <ul>
+        <li onclick="showSection('dashboard', event)" class="active">Dashboard</li>
+        <li onclick="showSection('addProduct', event)">Add Product</li>
+        <li onclick="showSection('myProducts', event)">My Products</li>
+        <li onclick="showSection('orders', event)">Orders</li>
+        <li onclick="showSection('analytics', event)">Sales Analytics</li>
+        <li onclick="showSection('earnings', event)">Earnings</li>
+        <!-- <li onclick="showSection('profile', event)">My Profile</li> -->
+    </ul>
+
+    <div class="status-box">
+        <p><strong>Store Status:</strong> <span class="text-success">Active</span></p>
+        <p>⭐ {{ user.sellerprofile.rating|default:"4.8" }} Rating</p>
+    </div>
+</div>
+
+<!-- ================= MAIN ================= -->
+<div class="main">
+
+<!-- TOPBAR -->
+<div class="topbar d-flex justify-content-between align-items-center mb-3">
+    <h2>Seller Dashboard 👋</h2>
+    <div class="user">{{ user.username }} - Seller</div>
+</div>
+
+<div class="mb-3">
+    <a href="/" class="btn btn-outline-light">← Back to Home</a>
+</div>
+
+<!-- ================= DASHBOARD ================= -->
+<div id="dashboard" class="section active-section">
+    <div class="row g-3">
+
+        <div class="col-md-3 col-12">
+            <div class="card stat-card blue">
+                <h6>Total Products</h6>
+                <h3>{{ products|length }}</h3>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-12">
+            <div class="card stat-card green">
+                <h6>Total Orders</h6>
+                <h3>{{ orders|length }}</h3>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-12">
+            <div class="card stat-card orange">
+                <h6>Total Sales</h6>
+                <h3>₹{{ total_sales|default:"0" }}</h3>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-12">
+            <div class="card stat-card purple">
+                <h6>Total Earnings</h6>
+                <h3>₹{{ total_earnings|default:"0" }}</h3>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ================= ADD PRODUCT ================= -->
+<div id="addProduct" class="section">
+<div class="card mt-4 p-4">
+
+    <h4>Quick Add Product</h4>
+
+    <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="hidden" name="add_product">
+
+    <div class="row g-3">
+
+        <div class="col-md-4">
+            <input type="text" name="name" class="form-control" placeholder="Product Name" required>
+        </div>
+
+        <div class="col-md-2">
+            <input type="number" name="price" class="form-control" placeholder="Price ₹" required>
+        </div>
+
+        <div class="col-md-3">
+            <select name="category" class="form-control" required>
+                <option value="">Select Category</option>
+                <option value="Men">Men</option>
+                <option value="Women">Women</option>
+                <option value="Kids">Kids</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select name="subcategory" class="form-control" required>
+                <option value="">Select Subcategory</option>
+                <optgroup label="Men">
+                    <option value="Tshirt">Tshirt</option>
+                    <option value="Shirt">Shirt</option>
+                    <option value="Jeans">Jeans</option>
+                    <option value="Watches">Watches</option>
+                    <option value="Perfumes">Perfumes</option>
+                    <option value="Hats">Hats</option>
+                </optgroup>
+                <optgroup label="Women">
+                    <option value="Dresses">Dresses</option>
+                    <option value="Tops">Tops</option>
+                    <option value="Heels">Heels</option>
+                    <option value="Bags">Bags</option>
+                    <option value="Jewellery">Jewellery</option>
+                </optgroup>
+                <optgroup label="Kids">
+                    <option value="Kidswear">Kidswear</option>
+                    <option value="Toys">Toys</option>
+                    <option value="Shoes">Shoes</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <input type="file" name="image" class="form-control">
+        </div>
+
+    </div>
+
+    <textarea name="description" class="form-control mt-3" placeholder="Description"></textarea>
+
+    <!-- ===== SIZE SECTION ===== -->
+    <h5 class="mt-3">Add Sizes &amp; Prices</h5>
+
+    <div id="size-container">
+        <div class="d-flex gap-2 mb-2">
+            <select name="size[]" class="form-control">
+                <option value="">Size</option>
+                <option value="XS">XS</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+                <option value="XXL">XXL</option>
+            </select>
+            <input type="number" name="size_price[]" class="form-control" placeholder="Price ₹">
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-secondary btn-sm mt-2" onclick="addSize()">+ Add More Sizes</button>
+
+    <!-- ===== STOCK / FEATURED / SUBMIT ===== -->
+    <div class="row g-3 mt-3">
+
+        <div class="col-md-2">
+            <input type="number" name="stock" class="form-control" placeholder="Stock">
+        </div>
+
+        <div class="col-md-2">
+            <label class="featured-label">
+                <input type="checkbox" name="is_featured"> Show on Homepage
+            </label>
+        </div>
+
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-success w-100">+ Add Product</button>
+        </div>
+
+    </div>
+
+    </form>
+</div>
+</div>
+
+<!-- ================= MY PRODUCTS ================= -->
+<div id="myProducts" class="section">
+<div class="card mt-4 p-4">
+
+    <h4>My Products</h4>
+
+    <table class="table table-dark table-striped mt-3">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Subcategory</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.category }}</td>
+                <td>{{ product.subcategory }}</td>
+                <td>₹{{ product.price }}</td>
+                <td>{{ product.stock }}</td>
+                <td>
+                    {% if product.stock > 0 %}
+                    <span class="text-success">Active</span>
+                    {% else %}
+                    <span class="text-danger">Out of Stock</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'update_product' product.id %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'delete_product' product.id %}" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7">No products added yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+</div>
+
+<!-- ================= ORDERS ================= -->
+<div id="orders" class="section">
+
+<div class="card mt-4 p-4">
+
+    <h4 class="mb-4">All Orders</h4>
+
+    {% for order in orders %}
+
+    <div class="border rounded p-3 mb-4">
+
+        <div class="row align-items-center">
+
+            <!-- PRODUCT IMAGE -->
+            <div class="col-md-2">
+
+                <img src="{{ order.product.image.url }}"
+                     class="img-fluid rounded"
+                     style="height:120px; object-fit:cover;">
+
+            </div>
+
+            <!-- PRODUCT DETAILS -->
+            <div class="col-md-3">
+
+                <h5 style="color: white !important;">{{ order.product.name }}</h5>
+
+                <p class="mb-1" style="color: white !important;">
+                    <strong>Size:</strong>
+                    {{ order.size }}
+                </p>
+
+                <p class="mb-1" style="color: white !important;;">
+                    <strong>Quantity:</strong>
+                    {{ order.quantity }}
+                </p>
+
+                <p class="mb-0" style="color: white !important;;">
+                    <strong>Amount:</strong>
+                    ₹{{ order.amount }}
+                </p>
+
+            </div>
+
+            <!-- ORDER DATE -->
+            <div class="col-md-2" style="color: white !important;;">
+
+                <strong>Ordered On:</strong>
+
+                <p style="color: white !important;;">
+                    {{ order.ordered_at }}
+                </p>
+
+            </div>
+
+            <!-- CURRENT STATUS -->
+            <div class="col-md-2">
+
+                {% if order.status == "Ordered" %}
+
+                <span class="badge bg-primary p-2">
+                    Ordered
+                </span>
+
+                {% elif order.status == "Packed" %}
+
+                <span class="badge bg-info p-2">
+                    Packed
+                </span>
+
+                {% elif order.status == "Shipped" %}
+
+                <span class="badge bg-warning text-dark p-2">
+                    Shipped
+                </span>
+
+                {% elif order.status == "Out for Delivery" %}
+
+                <span class="badge bg-secondary p-2">
+                    Out for Delivery
+                </span>
+
+                {% elif order.status == "Delivered" %}
+
+                <span class="badge bg-success p-2">
+                    Delivered
+                </span>
+
+                {% endif %}
+
+            </div>
+
+            <!-- UPDATE STATUS -->
+            <div class="col-md-3">
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    <input type="hidden"
+                           name="order_id"
+                           value="{{ order.id }}">
+
+                    <select name="status"
+                            class="form-control mb-2">
+
+                        <option value="Ordered">
+                            Ordered
+                        </option>
+
+                        <option value="Packed">
+                            Packed
+                        </option>
+
+                        <option value="Shipped">
+                            Shipped
+                        </option>
+
+                        <option value="Out for Delivery">
+                            Out for Delivery
+                        </option>
+
+                        <option value="Delivered">
+                            Delivered
+                        </option>
+
+                    </select>
+
+                    <button type="submit"
+                            name="update_order_status"
+                            class="btn btn-success btn-sm w-100">
+
+                        Update Status
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% empty %}
+
+    <div class="alert alert-dark">
+        No orders found.
+    </div>
+
+    {% endfor %}
+
+</div>
+
+</div>
+
+<!-- ================= ANALYTICS ================= -->
+<div id="analytics" class="section">
+<div class="card mt-4 p-4">
+    <h4>Sales Analytics</h4>
+    <p class="coming-soon-text">Coming Soon</p>
+</div>
+</div>
+
+<!-- ================= EARNINGS ================= -->
+<div id="earnings" class="section">
+<div class="card mt-4 p-4">
+    <h4>Earnings</h4>
+    <p class="earnings-text">₹{{ total_earnings|default:"0" }}</p>
+</div>
+</div>
+
+<!-- ================= PROFILE ================= -->
+<div id="profile" class="section">
+<div class="card profile-card p-4 mt-3">
+
+    <div class="row align-items-center">
+
+        <div class="col-md-4 text-center">
+            <form method="POST" enctype="multipart/form-data" action="{% url 'update_profile_image' %}">
+            {% csrf_token %}
+
+            <div class="profile-img-wrapper position-relative">
+
+                {% if profile.profile_image %}
+                <img src="{{ profile.profile_image.url }}" class="profile-img rounded-circle" id="profilePreview">
+                {% else %}
+                <img src="{% static 'default_profile.png' %}" class="profile-img rounded-circle" id="profilePreview">
+                {% endif %}
+
+                <input type="file" name="profile_image" class="profile-upload-input" onchange="previewProfileImage(this)">
+                <span class="upload-text">Upload</span>
+
+            </div>
+            </form>
+        </div>
+
+        <div class="col-md-8">
+            <h3 class="profile-username">{{ user.username }}</h3>
+            <p><strong>Total Products:</strong> {{ products|length }}</p>
+            <p><strong>Total Orders:</strong> {{ orders|length }}</p>
+            <p><strong>Rating:</strong> ⭐ {{ profile.rating|default:"4.8" }}</p>
+            <a href="{% url 'edit_profile' %}" class="btn btn-primary mt-2">Edit Profile</a>
+        </div>
+
+    </div>
+
+</div>
+</div>
+
+</div><!-- /.main -->
+</div><!-- /.dashboard -->
+
+<!-- ================= JS ================= -->
+<script>
+
+function showSection(sectionId, event) {
+    document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
+    document.getElementById(sectionId).style.display = 'block';
+    document.querySelectorAll('.sidebar ul li').forEach(li => li.classList.remove('active'));
+    if (event) event.currentTarget.classList.add('active');
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    showSection('dashboard');
+});
+
+function addSize() {
+    let html = `
+    <div class="d-flex gap-2 mb-2">
+        <select name="size[]" class="form-control">
+            <option value="">Size</option>
+            <option value="XS">XS</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+            <option value="XXL">XXL</option>
+        </select>
+        <input type="number" name="size_price[]" class="form-control" placeholder="Price ₹">
+    </div>`;
+    document.getElementById("size-container").insertAdjacentHTML("beforeend", html);
+}
+
+function previewProfileImage(input) {
+    if (input.files && input.files[0]) {
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById('profilePreview').src = e.target.result;
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+</script>
+
+</body>
+</html>

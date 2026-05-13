@@ -1,0 +1,644 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOVA | Cart</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="icon" href="{% static 'img/icon.png' %}">
+
+    <style>
+
+        /* ====== VARIABLES ====== */
+        :root {
+            --blue-core:  #007BFF;
+            --blue-light: #00c6ff;
+            --gold:       #ffd700;
+            --gold-deep:  #FF8C00;
+            --navy-deep:  #02142b;
+            --navy-mid:   #03193a;
+            --navy-card:  #071428;
+            --border-glow: rgba(0,198,255,0.25);
+            --glow-btn:   0 0 15px rgba(0,123,255,0.6), 0 0 35px rgba(0,198,255,0.3), 0 0 60px rgba(0,123,255,0.12);
+        }
+
+        /* ====== RESET ====== */
+        *, *::before, *::after {
+            margin: 0; padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* ====== BODY ====== */
+        body {
+            background:
+                radial-gradient(circle at 15% 20%,  rgba(0,198,255,0.18), transparent 35%),
+                radial-gradient(circle at 85% 80%,  rgba(255,215,0,0.10), transparent 30%),
+                radial-gradient(circle at 50% 50%,  rgba(0,80,180,0.08),  transparent 60%),
+                linear-gradient(145deg, #020d1f, #031428, #021a3a, #020d1f);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #e8f0ff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* animated dot grid */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle, rgba(255,255,255,0.055) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridMove 18s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ambient orb top-right */
+        body::after {
+            content: "";
+            position: fixed;
+            width: 700px; height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,100,255,0.09) 0%, transparent 70%);
+            top: -250px; right: -250px;
+            animation: orbDrift 14s ease-in-out infinite alternate;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes gridMove  { to { transform: translateY(-40px); } }
+        @keyframes orbDrift  { to { transform: translate(-80px, 90px) scale(1.2); } }
+
+        /* ====== BACK BUTTON BAR ====== */
+        .top-bar {
+            position: relative;
+            z-index: 1;
+            padding: 22px 0 0;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(0,198,255,0.25);
+            color: #d4e4ff;
+            text-decoration: none;
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            transition: 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            cursor: pointer;
+            box-shadow: 0 0 14px rgba(0,198,255,0.08);
+        }
+        .btn-back:hover {
+            background: rgba(0,198,255,0.14);
+            border-color: var(--blue-light);
+            color: #fff;
+            transform: translateX(-4px);
+            box-shadow: 0 0 22px rgba(0,198,255,0.35), 0 0 45px rgba(0,123,255,0.15);
+            text-shadow: 0 0 10px rgba(0,198,255,0.6);
+        }
+        .btn-back .arrow {
+            font-size: 17px;
+            line-height: 1;
+            transition: transform 0.3s;
+        }
+        .btn-back:hover .arrow {
+            transform: translateX(-3px);
+        }
+
+        /* ====== PAGE WRAPPER ====== */
+        .page-wrapper { position: relative; z-index: 1; padding: 30px 0 80px; }
+
+        /* ====== PAGE TITLE ====== */
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: 48px;
+            letter-spacing: 4px;
+            color: #fff;
+            text-shadow:
+                0 0 20px rgba(255,255,255,0.4),
+                0 0 50px rgba(0,198,255,0.5),
+                0 0 90px rgba(0,123,255,0.3);
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+        .page-title::after {
+            content: '';
+            display: block;
+            width: 80px; height: 3px;
+            margin: 14px auto 0;
+            border-radius: 2px;
+            background: linear-gradient(90deg, var(--blue-light), var(--gold), var(--blue-light));
+            background-size: 200% 100%;
+            animation: shimBar 3s linear infinite;
+            box-shadow: 0 0 12px var(--gold);
+        }
+        @keyframes shimBar {
+            0%   { background-position: 100% 0; }
+            100% { background-position: -100% 0; }
+        }
+
+        /* ====== CART ITEM CARD ====== */
+        .cart-card {
+            background: linear-gradient(135deg, rgba(5,20,55,0.92), rgba(3,12,35,0.96));
+            border: 1px solid var(--border-glow);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            transition: 0.45s cubic-bezier(0.23,1,0.32,1);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            animation: cardReveal 0.6s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        .cart-card:nth-child(1) { animation-delay: 0.05s; }
+        .cart-card:nth-child(2) { animation-delay: 0.12s; }
+        .cart-card:nth-child(3) { animation-delay: 0.19s; }
+        .cart-card:nth-child(4) { animation-delay: 0.26s; }
+        .cart-card:nth-child(5) { animation-delay: 0.33s; }
+
+        @keyframes cardReveal {
+            from { opacity:0; transform: perspective(900px) rotateX(8deg) translateY(30px); }
+            to   { opacity:1; transform: perspective(900px) rotateX(0)    translateY(0); }
+        }
+
+        .cart-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--blue-light), var(--gold), var(--blue-light), transparent);
+            background-size: 200% 100%;
+            animation: shimBar 3s linear infinite;
+            opacity: 0;
+            transition: 0.4s;
+        }
+
+        .cart-card::after {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 180px; height: 180px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,198,255,0.12), transparent 70%);
+            pointer-events: none;
+            transition: 0.5s;
+        }
+
+        .cart-card:hover {
+            transform: perspective(900px) rotateX(-2deg) rotateY(1deg) translateY(-6px);
+            border-color: rgba(0,198,255,0.5);
+            box-shadow:
+                0 20px 50px rgba(0,0,0,0.45),
+                0 0 35px rgba(0,123,255,0.4),
+                0 0 70px rgba(0,198,255,0.15),
+                inset 0 0 30px rgba(0,198,255,0.04);
+        }
+        .cart-card:hover::before { opacity: 1; }
+        .cart-card:hover::after  {
+            background: radial-gradient(circle, rgba(0,198,255,0.2), transparent 70%);
+        }
+
+        /* ====== PRODUCT IMAGE ====== */
+        .product-img-wrapper {
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+            box-shadow:
+                0 8px 25px rgba(0,0,0,0.5),
+                0 0 20px rgba(0,123,255,0.2);
+            transition: 0.45s;
+        }
+        .product-img-wrapper img {
+            border-radius: 14px;
+            width: 100%;
+            object-fit: cover;
+            aspect-ratio: 1 / 1;
+            transition: 0.5s cubic-bezier(0.23,1,0.32,1);
+            filter: brightness(0.92) saturate(1.1);
+        }
+        .cart-card:hover .product-img-wrapper {
+            box-shadow:
+                0 12px 35px rgba(0,0,0,0.55),
+                0 0 30px rgba(0,198,255,0.3);
+        }
+        .cart-card:hover .product-img-wrapper img {
+            transform: scale(1.06);
+            filter: brightness(1) saturate(1.2);
+        }
+
+        /* ====== PRODUCT INFO ====== */
+        .product-name {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 22px;
+            color: #fff;
+            text-shadow: 0 0 15px rgba(255,255,255,0.2);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .product-desc {
+            color: #7a9cc0;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .product-price {
+            font-size: 26px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--blue-light), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+            margin-bottom: 8px;
+        }
+
+        .product-meta {
+            color: #5a80aa;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+        .product-meta strong {
+            color: #8ab4d8;
+            font-weight: 600;
+        }
+
+        /* ====== QTY BADGE ====== */
+        .qty-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,123,255,0.15);
+            border: 1px solid rgba(0,198,255,0.3);
+            border-radius: 20px;
+            padding: 2px 14px;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--blue-light);
+            box-shadow: 0 0 10px rgba(0,198,255,0.15);
+        }
+
+        /* ====== ACTION BUTTONS ====== */
+        .btn-increase {
+            background: linear-gradient(135deg, #1a7a40, #22c55e);
+            color: white; border: none;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; font-weight: 700;
+            transition: 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            box-shadow: 0 0 12px rgba(34,197,94,0.4), 0 0 30px rgba(34,197,94,0.15);
+            text-decoration: none;
+            position: relative; overflow: hidden;
+            cursor: pointer;
+        }
+        .btn-increase:hover {
+            color: white;
+            transform: scale(1.18) rotate(5deg);
+            box-shadow: 0 0 22px rgba(34,197,94,0.7), 0 0 50px rgba(34,197,94,0.3);
+        }
+
+        .btn-decrease {
+            background: linear-gradient(135deg, #7a5a00, #f59e0b);
+            color: white; border: none;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; font-weight: 700;
+            transition: 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            box-shadow: 0 0 12px rgba(245,158,11,0.4), 0 0 30px rgba(245,158,11,0.15);
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .btn-decrease:hover {
+            color: white;
+            transform: scale(1.18) rotate(-5deg);
+            box-shadow: 0 0 22px rgba(245,158,11,0.7), 0 0 50px rgba(245,158,11,0.3);
+        }
+
+        .btn-remove {
+            background: linear-gradient(135deg, #7a1a1a, #ef4444);
+            color: white; border: none;
+            padding: 9px 20px;
+            border-radius: 30px;
+            font-weight: 600; font-size: 13px;
+            letter-spacing: 0.5px;
+            transition: 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            box-shadow: 0 0 12px rgba(239,68,68,0.4), 0 0 30px rgba(239,68,68,0.15);
+            text-decoration: none;
+            position: relative; overflow: hidden;
+            cursor: pointer;
+        }
+        .btn-remove::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -60%; width: 40%; height: 200%;
+            background: rgba(255,255,255,0.18);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+        }
+        .btn-remove:hover::before { left: 130%; }
+        .btn-remove:hover {
+            color: white;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 0 25px rgba(239,68,68,0.7), 0 0 55px rgba(239,68,68,0.3);
+        }
+
+        /* ====== EMPTY CART ====== */
+        .empty-cart {
+            text-align: center;
+            padding: 80px 20px;
+        }
+        .empty-cart-icon {
+            font-size: 80px;
+            display: block;
+            margin-bottom: 20px;
+            animation: floatIcon 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(0,198,255,0.5));
+        }
+        @keyframes floatIcon {
+            0%,100% { transform: translateY(0); }
+            50%      { transform: translateY(-12px); }
+        }
+        .empty-cart h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px; font-weight: 700;
+            color: #4a6a9a;
+            text-shadow: 0 0 20px rgba(0,123,255,0.2);
+        }
+
+        /* ====== SUMMARY CARD ====== */
+        .summary-card {
+            background: linear-gradient(135deg, rgba(0,20,60,0.95), rgba(0,10,35,0.98));
+            border: 1px solid var(--border-glow);
+            border-radius: 22px;
+            padding: 36px;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+            animation: cardReveal 0.6s 0.3s cubic-bezier(0.22,1,0.36,1) both;
+            box-shadow:
+                0 20px 60px rgba(0,0,0,0.4),
+                0 0 40px rgba(0,123,255,0.2),
+                inset 0 0 60px rgba(0,198,255,0.03);
+        }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--blue-light), var(--gold), var(--blue-light), transparent);
+            background-size: 200% 100%;
+            animation: shimBar 3s linear infinite;
+        }
+
+        .summary-card::after {
+            content: '';
+            position: absolute;
+            bottom: -80px; right: -80px;
+            width: 260px; height: 260px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,123,255,0.10), transparent 70%);
+            pointer-events: none;
+        }
+
+        .summary-label {
+            color: #5a80aa;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .summary-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 0 15px rgba(255,255,255,0.15);
+        }
+
+        .summary-total {
+            font-size: 36px;
+            background: linear-gradient(135deg, var(--blue-light), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+        }
+
+        .summary-divider {
+            border: none; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,198,255,0.25), transparent);
+            margin: 20px 0;
+        }
+
+        /* ====== ORDER BUTTON ====== */
+        .btn-order {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, var(--blue-core), var(--blue-light));
+            color: white; border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-align: center;
+            text-decoration: none;
+            transition: 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            box-shadow:
+                0 0 20px rgba(0,123,255,0.6),
+                0 0 50px rgba(0,123,255,0.3),
+                0 8px 25px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+            margin-top: 28px;
+            cursor: pointer;
+        }
+
+        .btn-order::before {
+            content: '';
+            position: absolute;
+            inset: -2px; border-radius: 52px;
+            background: linear-gradient(135deg, var(--blue-light), var(--gold), var(--blue-core));
+            z-index: -1;
+            opacity: 0;
+            transition: 0.35s;
+        }
+        .btn-order::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -60%; width: 40%; height: 100%;
+            background: rgba(255,255,255,0.22);
+            transform: skewX(-15deg);
+            transition: 0.65s;
+        }
+        .btn-order:hover::after   { left: 130%; }
+        .btn-order:hover::before  { opacity: 1; }
+        .btn-order:hover {
+            color: white;
+            transform: translateY(-4px) scale(1.03);
+            box-shadow:
+                0 0 30px var(--blue-light),
+                0 0 70px rgba(0,198,255,0.4),
+                0 14px 35px rgba(0,0,0,0.45);
+        }
+
+        /* ====== RESPONSIVE ====== */
+        @media (max-width: 768px) {
+            .page-title  { font-size: 36px; letter-spacing: 3px; }
+            .product-name { font-size: 18px; }
+            .summary-total { font-size: 28px; }
+            .btn-order { font-size: 15px; padding: 15px 30px; }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- ==================== BACK TO HOME ==================== -->
+<div class="top-bar">
+    <div class="container px-lg-5">
+        <a href="/" class="btn-back">
+            <span class="arrow">←</span> Back to Home
+        </a>
+    </div>
+</div>
+<!-- ==================== END BACK TO HOME ==================== -->
+
+
+<!-- ==================== MAIN CONTENT ==================== -->
+<div class="page-wrapper">
+<div class="container">
+
+    <h2 class="page-title">My Cart</h2>
+
+    <div class="row">
+        <div class="col-lg-8">
+
+            {% for item in cart_items %}
+
+            <div class="cart-card">
+                <div class="row align-items-center g-3">
+
+                    <!-- Product Image -->
+                    <div class="col-md-3 col-sm-4">
+                        <div class="product-img-wrapper">
+                            <img src="{{ item.product.image.url }}"
+                                 alt="{{ item.product.name }}">
+                        </div>
+                    </div>
+
+                    <!-- Product Details -->
+                    <div class="col-md-9 col-sm-8">
+
+                        <h3 class="product-name">{{ item.product.name }}</h3>
+                        <p class="product-desc">{{ item.product.description }}</p>
+
+                        <div class="product-price">
+                            ₹{% for size in item.product.sizes.all %}{% if size.size == item.size %}{{ size.price }}{% endif %}{% empty %}{{ item.product.price }}{% endfor %}
+                        </div>
+
+                        <p class="product-meta">
+                            <strong>Size :</strong>&nbsp;
+                            <span class="qty-badge">{{ item.size }}</span>
+                        </p>
+
+                        <p class="product-meta mt-2">
+                            <strong>Quantity :</strong>&nbsp;
+                            <span class="qty-badge">{{ item.quantity }}</span>
+                        </p>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex align-items-center gap-3 mt-3 flex-wrap">
+
+                            <a href="{% url 'increase_cart' item.id %}"
+                               class="btn-increase" title="Increase">+</a>
+
+                            <a href="{% url 'decrease_cart' item.id %}"
+                               class="btn-decrease" title="Decrease">−</a>
+
+                            <a href="{% url 'remove_cart' item.id %}"
+                               class="btn-remove">🗑 Remove</a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            {% empty %}
+
+            <div class="empty-cart">
+                <span class="empty-cart-icon">🛒</span>
+                <h3>Your cart is empty</h3>
+                <p class="mt-2" style="color:#3a5a7a;">Start shopping to add items here</p>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <!-- ====== SUMMARY PANEL ====== -->
+        <div class="col-lg-4 mt-4 mt-lg-0">
+            <div class="summary-card">
+
+                <h5 class="summary-label mb-4">Order Summary</h5>
+
+                <hr class="summary-divider">
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="summary-label">Subtotal</span>
+                    <span class="summary-value">₹{{ subtotal }}</span>
+                </div>
+
+                <hr class="summary-divider">
+
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="summary-label" style="font-size:16px; letter-spacing:1px;">Total</span>
+                    <span class="summary-total">₹{{ final_total }}</span>
+                </div>
+
+                <a href="{% url 'order_page' %}" class="btn-order">
+                    ✦ Order Now ✦
+                </a>
+
+                <p class="text-center mt-3" style="color:#2a4a6a; font-size:12px; letter-spacing:0.5px;">
+                    Secure Checkout &nbsp;🔒
+                </p>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</div>
+<!-- ==================== END MAIN ==================== -->
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

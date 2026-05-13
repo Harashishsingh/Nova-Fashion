@@ -1,0 +1,736 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="{% static 'img/icon.png' %}">
+
+    <style>
+
+        /* ================= GLOBAL ================= */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #050510;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: rgba(220, 235, 255, 0.92);
+        }
+
+        /* ===== STARFIELD BACKGROUND ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(0, 80, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(120, 0, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(0, 200, 255, 0.04) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
+                radial-gradient(1px 1px at 25% 60%, rgba(255,255,255,0.4) 0%, transparent 100%),
+                radial-gradient(1px 1px at 40% 30%, rgba(255,255,255,0.5) 0%, transparent 100%),
+                radial-gradient(1px 1px at 55% 80%, rgba(255,255,255,0.3) 0%, transparent 100%),
+                radial-gradient(1px 1px at 70% 20%, rgba(255,255,255,0.6) 0%, transparent 100%),
+                radial-gradient(1px 1px at 85% 55%, rgba(255,255,255,0.4) 0%, transparent 100%),
+                radial-gradient(1px 1px at 92% 10%, rgba(255,255,255,0.5) 0%, transparent 100%),
+                radial-gradient(1px 1px at 5%  90%, rgba(255,255,255,0.3) 0%, transparent 100%);
+            pointer-events: none;
+            z-index: 0;
+            animation: twinkle 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0%   { opacity: 0.4; }
+            100% { opacity: 1;   }
+        }
+
+        /* ================= NAVBAR ================= */
+        .navbar {
+            background: rgba(0, 10, 30, 0.85) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 15px 30px;
+            border-bottom: 1px solid rgba(0, 150, 255, 0.25);
+            box-shadow:
+                0 2px 20px rgba(0, 100, 255, 0.15),
+                0 0 60px rgba(0, 80, 255, 0.08),
+                inset 0 -1px 0 rgba(0, 200, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-size: 28px;
+            font-weight: 700;
+            color: white !important;
+            font-family: Georgia, serif;
+            letter-spacing: 4px;
+            text-shadow:
+                0 0 10px rgba(0, 200, 255, 0.8),
+                0 0 30px rgba(0, 150, 255, 0.5),
+                0 0 60px rgba(0, 100, 255, 0.3);
+            animation: logoPulse 3s ease-in-out infinite;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .navbar-brand:hover {
+            text-shadow:
+                0 0 20px rgba(0, 255, 255, 1),
+                0 0 50px rgba(0, 200, 255, 0.8),
+                0 0 100px rgba(0, 150, 255, 0.5);
+            transform: scale(1.05);
+        }
+
+        @keyframes logoPulse {
+            0%, 100% {
+                text-shadow:
+                    0 0 10px rgba(0,200,255,0.8),
+                    0 0 30px rgba(0,150,255,0.5),
+                    0 0 60px rgba(0,100,255,0.3);
+            }
+            50% {
+                text-shadow:
+                    0 0 20px rgba(0,220,255,1),
+                    0 0 50px rgba(0,180,255,0.7),
+                    0 0 90px rgba(0,120,255,0.5);
+            }
+        }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.07);
+            color: white !important;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 6px 18px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-back:hover {
+            background: rgba(0, 200, 255, 0.1);
+            border-color: rgba(0, 212, 255, 0.4);
+            box-shadow: 0 0 15px rgba(0, 200, 255, 0.3);
+            transform: translateY(-2px);
+            color: white !important;
+        }
+
+        /* ================= PAGE HEADER ================= */
+        .page-header {
+            text-align: center;
+            padding: 55px 20px 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header .eyebrow {
+            font-size: 12px;
+            font-weight: 600;
+            color: #00aaff;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px rgba(0, 170, 255, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .page-header h2 {
+            font-size: clamp(24px, 4vw, 40px);
+            font-weight: 700;
+            color: rgba(220, 235, 255, 0.95);
+            letter-spacing: 1px;
+            text-shadow:
+                0 0 20px rgba(0, 150, 255, 0.4),
+                0 0 40px rgba(0, 100, 255, 0.2);
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            font-size: 14px;
+            color: rgba(150, 180, 220, 0.55);
+            letter-spacing: 1px;
+        }
+
+        .header-divider {
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00aaff, transparent);
+            margin: 18px auto 0;
+            box-shadow: 0 0 10px rgba(0, 170, 255, 0.5);
+        }
+
+        /* ================= PRODUCT GRID ================= */
+        .product-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 28px;
+            padding: 45px 40px 70px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ================= PRODUCT CARD ================= */
+        /*
+         * KEY FIX: We DO NOT use opacity or transform in the card's
+         * keyframe animation because animation: none on hover resets
+         * them and makes the card vanish.
+         * Instead cards start visible (opacity:1) and we use a wrapper
+         * div that does the entrance fade, keeping the card itself
+         * always visible and safe to hover.
+         */
+
+        .card-wrapper {
+            opacity: 0;
+            transform: translateY(40px);
+            animation: wrapperReveal 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .card-wrapper:nth-child(1) { animation-delay: 0.05s; }
+        .card-wrapper:nth-child(2) { animation-delay: 0.12s; }
+        .card-wrapper:nth-child(3) { animation-delay: 0.19s; }
+        .card-wrapper:nth-child(4) { animation-delay: 0.26s; }
+        .card-wrapper:nth-child(5) { animation-delay: 0.33s; }
+        .card-wrapper:nth-child(6) { animation-delay: 0.40s; }
+        .card-wrapper:nth-child(7) { animation-delay: 0.47s; }
+        .card-wrapper:nth-child(8) { animation-delay: 0.54s; }
+
+        @keyframes wrapperReveal {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .product-card {
+            background: rgba(8, 15, 40, 0.85);
+            border-radius: 18px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(0, 100, 255, 0.2);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            backdrop-filter: blur(10px);
+            transform-style: preserve-3d;
+            /* always visible — no opacity/transform animation here */
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(0, 100, 255, 0.1);
+            transition:
+                border-color    0.4s ease,
+                box-shadow      0.4s ease,
+                transform       0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+            /* idle float via animation — NOT affecting opacity */
+            animation: cardFloat 6s ease-in-out infinite;
+        }
+
+        .product-card:nth-child(1) { animation-delay: 0s;   }
+        .product-card:nth-child(2) { animation-delay: -2s;  }
+        .product-card:nth-child(3) { animation-delay: -4s;  }
+        .product-card:nth-child(4) { animation-delay: -1s;  }
+
+        @keyframes cardFloat {
+            0%, 100% { transform: perspective(1000px) translateY(0px);  }
+            50%       { transform: perspective(1000px) translateY(-6px); }
+        }
+
+        /* gradient shine overlay */
+        .product-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 18px;
+            background: linear-gradient(135deg,
+                rgba(0, 150, 255, 0.05) 0%,
+                transparent 50%,
+                rgba(120, 0, 255, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* glow border ring */
+        .product-card::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 19px;
+            background: linear-gradient(135deg,
+                rgba(0, 200, 255, 0),
+                rgba(0, 100, 255, 0.4),
+                rgba(120, 0, 255, 0));
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* HOVER — pure transform only, no animation property change */
+        .product-card:hover {
+            transform: perspective(1000px) translateY(-14px) rotateX(3deg) scale(1.02) !important;
+            border-color: rgba(0, 200, 255, 0.5);
+            box-shadow:
+                0 25px 50px rgba(0, 0, 0, 0.6),
+                0 0 30px rgba(0, 150, 255, 0.25),
+                0 0 60px rgba(0, 100, 255, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .product-card:hover::before { opacity: 1; }
+        .product-card:hover::after  { opacity: 1; }
+
+        /* shine sweep */
+        .shine {
+            position: absolute;
+            top: 0; left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+            transition: left 0.6s ease;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .product-card:hover .shine { left: 150%; }
+
+        /* corner accents */
+        .card-corner {
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 60px; height: 60px;
+            background: radial-gradient(circle at bottom left, rgba(0, 100, 255, 0.15), transparent 70%);
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        .card-corner-tr {
+            position: absolute;
+            top: 0; right: 0;
+            width: 60px; height: 60px;
+            background: radial-gradient(circle at top right, rgba(120, 0, 255, 0.12), transparent 70%);
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        /* ================= PRODUCT IMAGE ================= */
+        .product-img {
+            position: relative;
+            height: 280px;
+            overflow: hidden;
+        }
+
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.5s;
+            filter: brightness(0.92) saturate(1.1);
+        }
+
+        .product-card:hover .product-img img {
+            transform: scale(1.08);
+            filter: brightness(1.05) saturate(1.2);
+        }
+
+        /* scan line */
+        .scan-line {
+            position: absolute;
+            top: -5%;
+            left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.7), transparent);
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 4;
+        }
+
+        .product-card:hover .scan-line {
+            opacity: 1;
+            animation: scanMove 1.5s linear infinite;
+        }
+
+        @keyframes scanMove {
+            0%   { top: -5%;  }
+            100% { top: 105%; }
+        }
+
+        /* ================= OVERLAY BUTTON ================= */
+        .overlay-btn {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top,
+                rgba(0, 5, 20, 0.85) 0%,
+                rgba(0, 10, 40, 0.3) 60%,
+                transparent 100%);
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 20px;
+            opacity: 0;
+            transition: opacity 0.35s;
+            z-index: 5;
+        }
+
+        .product-img:hover .overlay-btn { opacity: 1; }
+
+        .overlay-btn button {
+            background: linear-gradient(135deg, #0055ff, #0033cc);
+            color: white;
+            border-radius: 25px;
+            padding: 11px 30px;
+            border: 1px solid rgba(0, 150, 255, 0.5);
+            font-weight: 600;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow:
+                0 0 20px rgba(0, 100, 255, 0.5),
+                0 0 40px rgba(0, 80, 255, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .overlay-btn button::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 0; height: 0;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+
+        .overlay-btn button:hover::before { width: 200px; height: 200px; }
+
+        .overlay-btn button:hover {
+            background: linear-gradient(135deg, #0077ff, #0055ee);
+            box-shadow:
+                0 0 30px rgba(0, 150, 255, 0.8),
+                0 0 60px rgba(0, 100, 255, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px) scale(1.04);
+        }
+
+        /* ================= PRODUCT INFO ================= */
+        .product-info {
+            padding: 18px 16px 16px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 2;
+            border-top: 1px solid rgba(0, 100, 255, 0.12);
+        }
+
+        .product-info h5 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: rgba(220, 235, 255, 0.92);
+            letter-spacing: 0.3px;
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+
+        .product-card:hover .product-info h5 {
+            color: #00d4ff;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+
+        .product-info p {
+            font-size: 12px;
+            color: rgba(150, 180, 220, 0.6);
+            margin-bottom: 10px;
+            flex-grow: 1;
+            line-height: 1.55;
+        }
+
+        .product-info strong {
+            color: #00aaff;
+            font-size: 19px;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 12px;
+            text-shadow: 0 0 12px rgba(0, 170, 255, 0.5);
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+
+        .product-card:hover .product-info strong {
+            color: #00d4ff;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+        }
+
+        /* ================= REMOVE LINK ================= */
+        .remove-link {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: #ff6b8a;
+            border: 1px solid rgba(255, 50, 100, 0.35);
+            border-radius: 20px;
+            padding: 9px 14px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 8px rgba(200, 0, 50, 0.15);
+        }
+
+        .remove-link::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg,
+                rgba(200, 0, 50, 0.15),
+                rgba(150, 0, 80, 0.15));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .remove-link:hover {
+            color: #fff;
+            border-color: rgba(255, 50, 100, 0.7);
+            box-shadow:
+                0 0 15px rgba(255, 50, 100, 0.5),
+                0 0 30px rgba(200, 0, 50, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .remove-link:hover::before { opacity: 1; }
+
+        /* ================= EMPTY STATE ================= */
+        .empty-state-wrapper {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 20px;
+        }
+
+        .empty-state {
+            background: rgba(8, 15, 40, 0.85);
+            border: 1px solid rgba(0, 100, 255, 0.2);
+            border-radius: 20px;
+            padding: 60px 50px;
+            text-align: center;
+            max-width: 480px;
+            backdrop-filter: blur(20px);
+            box-shadow:
+                0 10px 40px rgba(0, 0, 0, 0.5),
+                0 0 30px rgba(0, 100, 255, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .empty-state::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00aaff, rgba(120,0,255,0.6), transparent);
+            animation: emptyLine 3s ease-in-out infinite;
+        }
+
+        @keyframes emptyLine {
+            0%, 100% { opacity: 0.3; }
+            50%       { opacity: 1;   }
+        }
+
+        .empty-state .empty-icon {
+            font-size: 56px;
+            display: block;
+            margin-bottom: 20px;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0);     }
+            50%       { transform: translateY(-10px); }
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: rgba(220, 235, 255, 0.9);
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 100, 255, 0.3);
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            color: rgba(150, 180, 220, 0.6);
+            margin-bottom: 28px;
+        }
+
+        .btn-shop {
+            display: inline-block;
+            padding: 12px 32px;
+            background: linear-gradient(135deg, #0055ff, #0033cc);
+            color: white !important;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(0, 150, 255, 0.4);
+            box-shadow:
+                0 0 20px rgba(0, 100, 255, 0.4),
+                0 0 40px rgba(0, 80, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+        .btn-shop:hover {
+            background: linear-gradient(135deg, #0088ff, #0055dd);
+            box-shadow:
+                0 0 30px rgba(0, 150, 255, 0.7),
+                0 0 60px rgba(0, 100, 255, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px) scale(1.03);
+            color: white !important;
+        }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 1200px) {
+            .product-container { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 992px) {
+            .product-container { grid-template-columns: repeat(2, 1fr); padding: 25px; }
+        }
+
+        @media (max-width: 576px) {
+            .product-container { grid-template-columns: 1fr; padding: 16px; gap: 18px; }
+            .page-header       { padding: 40px 16px 10px; }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">NOVA</a>
+            <div class="d-flex align-items-center gap-2">
+                <a href="/" class="btn-back">← Back to Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ================= PAGE HEADER ================= -->
+    <div class="page-header">
+        <p class="eyebrow">Your Collection</p>
+        <h2>My Favorites ❤️</h2>
+        <p>Your curated wishlist of items you love</p>
+        <div class="header-divider"></div>
+    </div>
+
+    <!-- ================= PRODUCT GRID ================= -->
+    <div class="container-fluid">
+        <div class="product-container">
+
+            {% for item in wishlist_items %}
+
+            <!-- card-wrapper handles the entrance animation safely -->
+            <div class="card-wrapper">
+                <div class="product-card">
+
+                    <div class="shine"></div>
+                    <div class="card-corner"></div>
+                    <div class="card-corner-tr"></div>
+
+                    <div class="product-img">
+                        <div class="scan-line"></div>
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                        <div class="overlay-btn">
+                            <button onclick="window.location.href='/product/{{ item.product.id }}/'">
+                                View Product
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="product-info">
+                        <h5>{{ item.product.name }}</h5>
+                        <p>{{ item.product.description|truncatechars:80 }}</p>
+                        <strong>₹{{ item.product.price }}</strong>
+                        <a href="{% url 'remove_from_wishlist' item.product.id %}" class="remove-link">
+                            Remove from Wishlist
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+            {% empty %}
+            <div class="empty-state-wrapper">
+                <div class="empty-state">
+                    <span class="empty-icon">🤍</span>
+                    <h3>Your wishlist is empty!</h3>
+                    <p>Explore our latest collections and add your favorites here.</p>
+                    <a href="/" class="btn-shop">Start Shopping</a>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        /* 3D mouse-tilt — overrides the float animation via inline style,
+           but never touches opacity so cards never disappear             */
+        document.querySelectorAll('.product-card').forEach(card => {
+
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x  = e.clientX - rect.left;
+                const y  = e.clientY - rect.top;
+                const cx = rect.width  / 2;
+                const cy = rect.height / 2;
+                const rotX = ((y - cy) / cy) * -8;
+                const rotY = ((x - cx) / cx) *  8;
+                /* inline transform wins over the animation, card stays visible */
+                card.style.transform =
+                    `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-14px) scale(1.02)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                /* clear inline transform → CSS transition eases back, float resumes */
+                card.style.transition =
+                    'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.4s, box-shadow 0.4s';
+                card.style.transform = '';
+                setTimeout(() => { card.style.transition = ''; }, 500);
+            });
+        });
+    </script>
+
+</body>
+</html>

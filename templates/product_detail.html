@@ -1,0 +1,885 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOVA | {{ product.name }}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="{% static 'img/icon.png' %}">
+
+    <style>
+
+        /* ================= GLOBAL ================= */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #050510;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: rgba(220, 235, 255, 0.92);
+        }
+
+        /* ===== STARFIELD BACKGROUND ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(0, 80, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(120, 0, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(0, 200, 255, 0.04) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
+                radial-gradient(1px 1px at 25% 60%, rgba(255,255,255,0.4) 0%, transparent 100%),
+                radial-gradient(1px 1px at 40% 30%, rgba(255,255,255,0.5) 0%, transparent 100%),
+                radial-gradient(1px 1px at 55% 80%, rgba(255,255,255,0.3) 0%, transparent 100%),
+                radial-gradient(1px 1px at 70% 20%, rgba(255,255,255,0.6) 0%, transparent 100%),
+                radial-gradient(1px 1px at 85% 55%, rgba(255,255,255,0.4) 0%, transparent 100%),
+                radial-gradient(1px 1px at 92% 10%, rgba(255,255,255,0.5) 0%, transparent 100%),
+                radial-gradient(1px 1px at 5%  90%, rgba(255,255,255,0.3) 0%, transparent 100%);
+            pointer-events: none;
+            z-index: 0;
+            animation: twinkle 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0%   { opacity: 0.4; }
+            100% { opacity: 1;   }
+        }
+
+        /* ================= NAVBAR ================= */
+        .navbar {
+            background: rgba(0, 10, 30, 0.85) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 15px 30px;
+            border-bottom: 1px solid rgba(0, 150, 255, 0.25);
+            box-shadow:
+                0 2px 20px rgba(0, 100, 255, 0.15),
+                0 0 60px rgba(0, 80, 255, 0.08),
+                inset 0 -1px 0 rgba(0, 200, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-size: 28px;
+            font-weight: 700;
+            color: white !important;
+            font-family: Georgia, serif;
+            letter-spacing: 4px;
+            text-shadow:
+                0 0 10px rgba(0, 200, 255, 0.8),
+                0 0 30px rgba(0, 150, 255, 0.5),
+                0 0 60px rgba(0, 100, 255, 0.3);
+            animation: logoPulse 3s ease-in-out infinite;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .navbar-brand:hover {
+            text-shadow:
+                0 0 20px rgba(0, 255, 255, 1),
+                0 0 50px rgba(0, 200, 255, 0.8),
+                0 0 100px rgba(0, 150, 255, 0.5);
+            transform: scale(1.05);
+        }
+
+        @keyframes logoPulse {
+            0%, 100% {
+                text-shadow:
+                    0 0 10px rgba(0,200,255,0.8),
+                    0 0 30px rgba(0,150,255,0.5),
+                    0 0 60px rgba(0,100,255,0.3);
+            }
+            50% {
+                text-shadow:
+                    0 0 20px rgba(0,220,255,1),
+                    0 0 50px rgba(0,180,255,0.7),
+                    0 0 90px rgba(0,120,255,0.5);
+            }
+        }
+
+        .nav-link {
+            color: rgba(200, 220, 255, 0.85) !important;
+            font-size: 15px;
+            font-family: Georgia, serif;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+            transition: all 0.3s;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover {
+            color: #00d4ff !important;
+            text-shadow: 0 0 8px rgba(0, 212, 255, 0.8), 0 0 20px rgba(0, 150, 255, 0.4);
+        }
+
+        .nav-link:hover::after { width: 80%; }
+
+        /* ================= MEGA MENU ================= */
+        .dropdown-menu {
+            width: 900px;
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 150, 255, 0.25);
+            background: rgba(5, 10, 30, 0.95);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            box-shadow:
+                0 20px 60px rgba(0, 50, 150, 0.4),
+                0 0 40px rgba(0, 100, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            animation: menuFadeIn 0.3s ease;
+        }
+
+        @keyframes menuFadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .dropdown-menu.show { display: flex !important; justify-content: space-between; gap: 40px; }
+        .mega-column { min-width: 160px; }
+
+        .mega-column h6 {
+            font-weight: 600;
+            color: #00d4ff;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            padding-bottom: 5px;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+            letter-spacing: 1px;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .custom-link {
+            display: block;
+            color: rgba(180, 210, 255, 0.75) !important;
+            font-size: 14px;
+            padding: 7px 10px;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.25s;
+            border: 1px solid transparent;
+        }
+
+        .custom-link:hover {
+            color: #00d4ff !important;
+            background: rgba(0, 150, 255, 0.1);
+            border-color: rgba(0, 212, 255, 0.2);
+            text-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
+            padding-left: 16px;
+            box-shadow: inset 3px 0 0 #00d4ff;
+        }
+
+        .mega-img img {
+            width: 220px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 1px solid rgba(0, 150, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 100, 255, 0.2);
+            transition: 0.3s;
+        }
+
+        .mega-img img:hover {
+            box-shadow: 0 0 30px rgba(0, 200, 255, 0.4);
+            transform: scale(1.02);
+        }
+
+        /* ================= NAVBAR BUTTONS ================= */
+        .search-box {
+            background: rgba(255,255,255,0.06) !important;
+            border: 1px solid rgba(0,150,255,0.3) !important;
+            color: white !important;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .search-box::placeholder { color: rgba(150,190,255,0.5); }
+
+        .search-box:focus {
+            background: rgba(0,100,255,0.1) !important;
+            border-color: rgba(0,212,255,0.6) !important;
+            box-shadow: 0 0 0 3px rgba(0,212,255,0.1), 0 0 20px rgba(0,150,255,0.2) !important;
+            outline: none;
+        }
+
+        .btn-glow-light {
+            background: rgba(255,255,255,0.07);
+            color: white !important;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 13px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-glow-light:hover {
+            background: rgba(0,200,255,0.1);
+            border-color: rgba(0,212,255,0.4);
+            box-shadow: 0 0 15px rgba(0,200,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-glow-primary {
+            background: linear-gradient(135deg, #0066ff, #0040cc);
+            color: white !important;
+            border: 1px solid rgba(0,150,255,0.4);
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(0,100,255,0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-glow-primary:hover {
+            background: linear-gradient(135deg, #0088ff, #0055dd);
+            box-shadow: 0 0 25px rgba(0,150,255,0.6), 0 0 50px rgba(0,100,255,0.3);
+            transform: translateY(-2px);
+            color: white !important;
+        }
+
+        .btn-glow-danger {
+            background: linear-gradient(135deg, #cc0033, #990022);
+            color: white !important;
+            border: 1px solid rgba(255,50,80,0.4);
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(200,0,50,0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-glow-danger:hover {
+            box-shadow: 0 0 25px rgba(255,50,80,0.6), 0 0 50px rgba(200,0,50,0.3);
+            transform: translateY(-2px);
+            color: white !important;
+        }
+
+        /* ================= PRODUCT DETAIL LAYOUT ================= */
+        .container-box {
+            display: flex;
+            gap: 60px;
+            padding: 60px 8%;
+            justify-content: center;
+            align-items: flex-start;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ================= IMAGE SECTION ================= */
+        .product-image-section {
+            flex: 1;
+            max-width: 500px;
+            position: sticky;
+            top: 100px;
+        }
+
+        /* entrance animation wrapper — safe pattern (no opacity on the card itself) */
+        .image-reveal {
+            opacity: 0;
+            transform: translateX(-40px);
+            animation: slideInLeft 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s forwards;
+        }
+
+        @keyframes slideInLeft {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .image-card {
+            background: rgba(8, 15, 40, 0.85);
+            padding: 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 100, 255, 0.2);
+            box-shadow:
+                0 10px 40px rgba(0,0,0,0.5),
+                0 0 0 1px rgba(0,100,255,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.04);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            position: relative;
+            transition: border-color 0.4s, box-shadow 0.4s;
+        }
+
+        /* top edge glow line */
+        .image-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00aaff, rgba(120,0,255,0.6), transparent);
+            animation: topLinePulse 3s ease-in-out infinite;
+            z-index: 2;
+        }
+
+        @keyframes topLinePulse {
+            0%, 100% { opacity: 0.3; }
+            50%       { opacity: 1;   }
+        }
+
+        /* scan line that runs down the image */
+        .img-scan {
+            position: absolute;
+            top: -5%;
+            left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(0,212,255,0.7), transparent);
+            box-shadow: 0 0 10px rgba(0,212,255,0.8);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 3;
+            animation: imgScanMove 3s linear infinite;
+        }
+
+        @keyframes imgScanMove {
+            0%   { top: -5%;  opacity: 0;   }
+            5%   { opacity: 1; }
+            95%  { opacity: 1; }
+            100% { top: 105%; opacity: 0;   }
+        }
+
+        .image-card:hover {
+            border-color: rgba(0, 200, 255, 0.45);
+            box-shadow:
+                0 20px 60px rgba(0,0,0,0.6),
+                0 0 30px rgba(0,150,255,0.2),
+                0 0 60px rgba(0,100,255,0.1);
+        }
+
+        .image-card img {
+            width: 100%;
+            max-height: 75vh;
+            object-fit: cover;
+            border-radius: 12px;
+            display: block;
+            transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.5s;
+            filter: brightness(0.95) saturate(1.1);
+        }
+
+        .image-card:hover img {
+            transform: scale(1.03);
+            filter: brightness(1.05) saturate(1.2);
+        }
+
+        /* corner accents */
+        .img-corner-bl {
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 70px; height: 70px;
+            background: radial-gradient(circle at bottom left, rgba(0,100,255,0.18), transparent 70%);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .img-corner-tr {
+            position: absolute;
+            top: 0; right: 0;
+            width: 70px; height: 70px;
+            background: radial-gradient(circle at top right, rgba(120,0,255,0.15), transparent 70%);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* ================= DETAILS SECTION ================= */
+        .details-reveal {
+            opacity: 0;
+            transform: translateX(40px);
+            animation: slideInRight 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s forwards;
+        }
+
+        @keyframes slideInRight {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .product-details-section {
+            flex: 1;
+            max-width: 460px;
+        }
+
+        /* category badge */
+        .product-badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #00aaff;
+            background: rgba(0,150,255,0.1);
+            border: 1px solid rgba(0,150,255,0.25);
+            border-radius: 20px;
+            padding: 4px 14px;
+            margin-bottom: 14px;
+            text-shadow: 0 0 8px rgba(0,170,255,0.4);
+        }
+
+        .product-details-section h2 {
+            font-weight: 700;
+            font-size: clamp(22px, 3vw, 32px);
+            color: rgba(220,235,255,0.95);
+            margin-bottom: 14px;
+            line-height: 1.3;
+            text-shadow: 0 0 30px rgba(0,100,255,0.15);
+        }
+
+        .product-details-section p {
+            color: rgba(150,180,220,0.7);
+            line-height: 1.75;
+            margin-bottom: 28px;
+            font-size: 14px;
+            font-weight: 300;
+        }
+
+        /* divider */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, rgba(0,150,255,0.3), transparent);
+            margin: 22px 0;
+        }
+
+        .price-text {
+            font-size: 32px;
+            font-weight: 700;
+            color: #00aaff;
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px rgba(0,170,255,0.6), 0 0 30px rgba(0,120,255,0.3);
+            animation: priceGlow 3s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes priceGlow {
+            0%, 100% { text-shadow: 0 0 15px rgba(0,170,255,0.5), 0 0 30px rgba(0,120,255,0.2); }
+            50%       { text-shadow: 0 0 25px rgba(0,212,255,0.9), 0 0 50px rgba(0,150,255,0.5); }
+        }
+
+        /* ================= SIZE SELECTION ================= */
+        .size-label-title {
+            font-weight: 600;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(180,210,255,0.7);
+            margin-bottom: 14px;
+        }
+
+        .size-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 35px;
+        }
+
+        .size-container input { display: none; }
+
+        .size-container label {
+            border: 1px solid rgba(0,100,255,0.3);
+            padding: 10px 22px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(8,15,40,0.6);
+            color: rgba(180,210,255,0.8);
+            backdrop-filter: blur(8px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .size-container label::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0,150,255,0.1), rgba(120,0,255,0.1));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .size-container label:hover {
+            border-color: rgba(0,200,255,0.5);
+            color: #00d4ff;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 0 15px rgba(0,150,255,0.3), 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .size-container label:hover::before { opacity: 1; }
+
+        .size-container input:checked + label {
+            background: linear-gradient(135deg, #0055ff, #0033cc);
+            color: white;
+            border-color: rgba(0,150,255,0.7);
+            box-shadow:
+                0 0 20px rgba(0,100,255,0.5),
+                0 0 40px rgba(0,80,255,0.25),
+                inset 0 1px 0 rgba(255,255,255,0.15);
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        /* ================= ADD TO CART BUTTON ================= */
+        .add-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #0055ff, #0033cc);
+            color: white;
+            border: 1px solid rgba(0,150,255,0.5);
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            box-shadow:
+                0 0 20px rgba(0,100,255,0.4),
+                0 0 40px rgba(0,80,255,0.2),
+                inset 0 1px 0 rgba(255,255,255,0.12);
+        }
+
+        /* ripple on click */
+        .add-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 0; height: 0;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .add-btn:hover::before { width: 500px; height: 500px; }
+
+        /* shine sweep */
+        .add-btn::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .add-btn:hover::after { left: 150%; }
+
+        .add-btn:hover {
+            background: linear-gradient(135deg, #0077ff, #0055ee);
+            transform: translateY(-4px) scale(1.01);
+            box-shadow:
+                0 0 30px rgba(0,150,255,0.7),
+                0 0 60px rgba(0,100,255,0.4),
+                0 10px 30px rgba(0,0,0,0.4),
+                inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+
+        .add-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* ================= STOCK BADGE ================= */
+        .stock-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            padding: 5px 14px;
+            border-radius: 20px;
+        }
+
+        .stock-badge.in-stock {
+            color: #00ff88;
+            background: rgba(0,255,136,0.08);
+            border: 1px solid rgba(0,255,136,0.25);
+            text-shadow: 0 0 8px rgba(0,255,136,0.5);
+        }
+
+        .stock-badge.out-stock {
+            color: #ff6b8a;
+            background: rgba(255,50,100,0.08);
+            border: 1px solid rgba(255,50,100,0.25);
+        }
+
+        .stock-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: dotPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes dotPulse {
+            0%, 100% { transform: scale(1);   opacity: 1; }
+            50%       { transform: scale(1.5); opacity: 0.6; }
+        }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 992px) {
+            .container-box {
+                flex-direction: column;
+                align-items: center;
+                padding: 30px 20px;
+                gap: 35px;
+            }
+
+            .product-image-section {
+                position: relative;
+                top: 0;
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .product-details-section { max-width: 100%; }
+
+            .dropdown-menu {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            .dropdown-menu.show { gap: 15px; }
+        }
+
+        @media (max-width: 576px) {
+            .price-text { font-size: 26px; }
+            .add-btn    { font-size: 15px; padding: 14px; }
+        }
+
+        /* ================= TOGGLER ================= */
+        .navbar-toggler { border-color: rgba(0,150,255,0.4); }
+        .navbar-toggler:focus { box-shadow: 0 0 0 3px rgba(0,150,255,0.25); }
+
+    </style>
+</head>
+
+<body>
+
+
+
+    
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">NOVA</a>
+            <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="nav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+
+                    <li class="nav-item dropdown position-static">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" style="cursor:pointer;">Men</a>
+                        <div class="dropdown-menu">
+                            <div class="mega-column">
+                                <h6>Clothing</h6>
+                                <a class="custom-link" href="{% url 'product_page' 'Men' 'Tshirt' %}">T-Shirts</a>
+                                <a class="custom-link" href="{% url 'product_page' 'Men' 'Shirt' %}">Shirts</a>
+                                <a class="custom-link" href="{% url 'product_page' 'Men' 'Jeans' %}">Jeans</a>
+                            </div>
+                            <div class="mega-column">
+                                <h6>Accessories</h6>
+                                <a class="custom-link" href="#">Watches</a>
+                                <a class="custom-link" href="#">Perfumes</a>
+                            </div>
+                            <div class="mega-img">
+                                <img src="https://i0.wp.com/peacockblue.co.za/wp-content/uploads/2020/04/pb-stellenbosch-003.jpg" alt="Men">
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown position-static">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" style="cursor:pointer;">Women</a>
+                        <div class="dropdown-menu">
+                            <div class="mega-column">
+                                <h6>Clothing</h6>
+                                <a class="custom-link" href="{% url 'product_page' 'Women' 'Dresses' %}">Dresses</a>
+                                <a class="custom-link" href="{% url 'product_page' 'Women' 'Tops' %}">Tops</a>
+                            </div>
+                            <div class="mega-img">
+                                <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d" alt="Women">
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown position-static">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" style="cursor:pointer;">Kids</a>
+                        <div class="dropdown-menu">
+                            <div class="mega-column">
+                                <h6>Categories</h6>
+                                <a class="custom-link" href="#">Clothes</a>
+                                <a class="custom-link" href="#">Toys</a>
+                            </div>
+                            <div class="mega-img">
+                                <img src="https://thebestoflkn.com/wp-content/uploads/2025/01/airlie-baby-birkdale-village-02.jpg" alt="Kids">
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-2">
+                    <form method="GET" action="{% url 'search_products' %}" class="d-flex">
+                        <input type="search" name="q" class="form-control form-control-sm search-box" placeholder="Search...">
+                        <button class="btn-glow-light btn-sm ms-1" type="submit">🔍</button>
+                    </form>
+
+                    <a href="{% url 'wishlist_view' %}" class="btn-glow-light btn-sm">❤️</a>
+
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'dashboard' %}" class="btn-glow-light btn-sm">{{ user.username }}</a>
+                        <a href="/logout" class="btn-glow-danger btn-sm">Logout</a>
+                    {% else %}
+                        <a href="{% url 'signin' %}" class="btn-glow-primary btn-sm">Sign In</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ================= PRODUCT DETAIL ================= -->
+    <div class="container-box">
+
+        <!-- IMAGE -->
+        <div class="product-image-section">
+            <div class="image-reveal">
+                <div class="image-card">
+                    <div class="img-scan"></div>
+                    <div class="img-corner-bl"></div>
+                    <div class="img-corner-tr"></div>
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                </div>
+            </div>
+        </div>
+
+        <!-- DETAILS -->
+        <div class="product-details-section">
+            <div class="details-reveal">
+
+                <div class="product-badge">{{ product.category }} · {{ product.subcategory }}</div>
+
+                <h2>{{ product.name }}</h2>
+                <p>{{ product.description }}</p>
+
+                <div class="section-divider"></div>
+
+                <div class="price-text" id="price">₹{{ product.price }}</div>
+
+                <div class="section-divider"></div>
+
+                <form method="POST" action="{% url 'add_to_cart' product.id %}">
+
+    {% csrf_token %}
+
+    <p class="size-label-title">Select Size</p>
+
+    <div class="size-container">
+
+        {% for s in sizes %}
+
+        <input
+            type="radio"
+            name="size"
+            value="{{ s.size }}"
+            id="size{{ forloop.counter }}"
+            data-price="{{ s.price }}"
+            onclick="updatePrice(this)"
+            required
+        >
+
+        <label for="size{{ forloop.counter }}">
+            {{ s.size }}
+        </label>
+
+        {% empty %}
+
+        <p style="color:#ff6b8a; font-size:14px;">
+            No sizes available
+        </p>
+
+        {% endfor %}
+
+    </div>
+
+    <button type="submit" class="add-btn">
+        Add to Cart
+    </button>
+
+</form>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        /* original logic — untouched */
+        function updatePrice(el) {
+            let price = el.getAttribute('data-price');
+            document.getElementById('price').innerText = "₹" + price;
+        }
+
+        /* 3D tilt on image card */
+        const imgCard = document.querySelector('.image-card');
+        if (imgCard) {
+            imgCard.addEventListener('mousemove', e => {
+                const rect = imgCard.getBoundingClientRect();
+                const x  = e.clientX - rect.left;
+                const y  = e.clientY - rect.top;
+                const cx = rect.width  / 2;
+                const cy = rect.height / 2;
+                const rotX = ((y - cy) / cy) * -6;
+                const rotY = ((x - cx) / cx) *  6;
+                imgCard.style.transform =
+                    `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.01)`;
+            });
+
+            imgCard.addEventListener('mouseleave', () => {
+                imgCard.style.transition = 'transform 0.5s cubic-bezier(0.175,0.885,0.32,1.275), border-color 0.4s, box-shadow 0.4s';
+                imgCard.style.transform = '';
+                setTimeout(() => { imgCard.style.transition = ''; }, 500);
+            });
+        }
+    </script>
+
+</body>
+</html>

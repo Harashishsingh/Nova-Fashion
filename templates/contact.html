@@ -1,0 +1,1597 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOVA | Contact Us</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+
+        /* ================= GLOBAL ================= */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #050510;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: rgba(220, 235, 255, 0.92);
+        }
+
+        /* ===== STARFIELD ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(0,80,255,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(120,0,255,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(0,200,255,0.04) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
+                radial-gradient(1px 1px at 25% 60%, rgba(255,255,255,0.4) 0%, transparent 100%),
+                radial-gradient(1px 1px at 40% 30%, rgba(255,255,255,0.5) 0%, transparent 100%),
+                radial-gradient(1px 1px at 55% 80%, rgba(255,255,255,0.3) 0%, transparent 100%),
+                radial-gradient(1px 1px at 70% 20%, rgba(255,255,255,0.6) 0%, transparent 100%),
+                radial-gradient(1px 1px at 85% 55%, rgba(255,255,255,0.4) 0%, transparent 100%),
+                radial-gradient(1px 1px at 92% 10%, rgba(255,255,255,0.5) 0%, transparent 100%),
+                radial-gradient(1px 1px at 5%  90%, rgba(255,255,255,0.3) 0%, transparent 100%);
+            pointer-events: none;
+            z-index: 0;
+            animation: twinkle 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0%   { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        /* ================= NAVBAR ================= */
+        .navbar {
+            background: rgba(0,10,30,0.85) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 15px 30px;
+            border-bottom: 1px solid rgba(0,150,255,0.25);
+            box-shadow:
+                0 2px 20px rgba(0,100,255,0.15),
+                0 0 60px rgba(0,80,255,0.08),
+                inset 0 -1px 0 rgba(0,200,255,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: box-shadow 0.3s;
+        }
+
+        .navbar-brand {
+            font-size: 28px;
+            font-weight: 700;
+            color: white !important;
+            font-family: Georgia, serif;
+            letter-spacing: 4px;
+            text-shadow:
+                0 0 10px rgba(0,200,255,0.8),
+                0 0 30px rgba(0,150,255,0.5),
+                0 0 60px rgba(0,100,255,0.3);
+            animation: logoPulse 3s ease-in-out infinite;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .navbar-brand:hover {
+            text-shadow:
+                0 0 20px rgba(0,255,255,1),
+                0 0 50px rgba(0,200,255,0.8),
+                0 0 100px rgba(0,150,255,0.5);
+            transform: scale(1.05);
+        }
+
+        @keyframes logoPulse {
+            0%,100% { text-shadow: 0 0 10px rgba(0,200,255,0.8), 0 0 30px rgba(0,150,255,0.5), 0 0 60px rgba(0,100,255,0.3); }
+            50%      { text-shadow: 0 0 20px rgba(0,220,255,1),   0 0 50px rgba(0,180,255,0.7), 0 0 90px rgba(0,120,255,0.5); }
+        }
+
+        .nav-link {
+            color: rgba(200,220,255,0.85) !important;
+            font-size: 15px;
+            font-family: Georgia, serif;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: 50%;
+            width: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+            transition: all 0.3s;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover        { color: #00d4ff !important; text-shadow: 0 0 8px rgba(0,212,255,0.8), 0 0 20px rgba(0,150,255,0.4); }
+        .nav-link:hover::after { width: 80%; }
+        .nav-link.active-page  { color: #00d4ff !important; text-shadow: 0 0 8px rgba(0,212,255,0.8); }
+        .nav-link.active-page::after { width: 80%; }
+
+        /* ===== MEGA MENU ===== */
+        .dropdown-menu {
+            width: 900px;
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px solid rgba(0,150,255,0.25);
+            background: rgba(5,10,30,0.95);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            box-shadow: 0 20px 60px rgba(0,50,150,0.4), 0 0 40px rgba(0,100,255,0.1), inset 0 1px 0 rgba(255,255,255,0.05);
+            animation: menuFadeIn 0.3s ease;
+        }
+
+        @keyframes menuFadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .dropdown-menu.show { display: flex !important; justify-content: space-between; gap: 40px; }
+        .mega-column { min-width: 160px; }
+
+        .mega-column h6 {
+            font-weight: 600;
+            color: #00d4ff;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(0,212,255,0.2);
+            padding-bottom: 5px;
+            text-shadow: 0 0 10px rgba(0,212,255,0.5);
+            letter-spacing: 1px;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .custom-link {
+            display: block;
+            color: rgba(180,210,255,0.75) !important;
+            font-size: 14px;
+            padding: 7px 10px;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.25s;
+            border: 1px solid transparent;
+        }
+
+        .custom-link:hover {
+            color: #00d4ff !important;
+            background: rgba(0,150,255,0.1);
+            border-color: rgba(0,212,255,0.2);
+            text-shadow: 0 0 8px rgba(0,212,255,0.6);
+            padding-left: 16px;
+            box-shadow: inset 3px 0 0 #00d4ff;
+        }
+
+        .mega-img img {
+            width: 220px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 1px solid rgba(0,150,255,0.2);
+            box-shadow: 0 0 20px rgba(0,100,255,0.2);
+            transition: 0.3s;
+        }
+
+        .mega-img img:hover { box-shadow: 0 0 30px rgba(0,200,255,0.4); transform: scale(1.02); }
+
+        /* ===== NAV BUTTONS ===== */
+        .search-box {
+            background: rgba(255,255,255,0.06) !important;
+            border: 1px solid rgba(0,150,255,0.3) !important;
+            color: white !important;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+        .search-box::placeholder { color: rgba(150,190,255,0.5); }
+        .search-box:focus {
+            background: rgba(0,100,255,0.1) !important;
+            border-color: rgba(0,212,255,0.6) !important;
+            box-shadow: 0 0 0 3px rgba(0,212,255,0.1), 0 0 20px rgba(0,150,255,0.2) !important;
+            outline: none;
+        }
+
+        .btn-glow-primary {
+            background: linear-gradient(135deg,#0066ff,#0040cc);
+            color: white !important;
+            border: 1px solid rgba(0,150,255,0.4);
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(0,100,255,0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-glow-primary:hover {
+            background: linear-gradient(135deg,#0088ff,#0055dd);
+            box-shadow: 0 0 25px rgba(0,150,255,0.6), 0 0 50px rgba(0,100,255,0.3);
+            transform: translateY(-2px);
+            color: white !important;
+        }
+
+        .btn-glow-danger {
+            background: linear-gradient(135deg,#cc0033,#990022);
+            color: white !important;
+            border: 1px solid rgba(255,50,80,0.4);
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(200,0,50,0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-glow-danger:hover {
+            box-shadow: 0 0 25px rgba(255,50,80,0.6);
+            transform: translateY(-2px);
+            color: white !important;
+        }
+
+        .btn-glow-light {
+            background: rgba(255,255,255,0.07);
+            color: white !important;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 13px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-glow-light:hover {
+            background: rgba(0,200,255,0.1);
+            border-color: rgba(0,212,255,0.4);
+            box-shadow: 0 0 15px rgba(0,200,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .navbar-toggler { border-color: rgba(0,150,255,0.4); }
+        .navbar-toggler:focus { box-shadow: 0 0 0 3px rgba(0,150,255,0.25); }
+
+        /* ===================================================
+           HERO BANNER
+        =================================================== */
+        #contact-hero {
+            position: relative;
+            z-index: 1;
+            min-height: 42vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .contact-hero-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1600');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            z-index: 0;
+        }
+
+        .contact-hero-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg,
+                rgba(0,5,20,0.91) 0%,
+                rgba(0,20,60,0.78) 50%,
+                rgba(5,0,30,0.88) 100%);
+            z-index: 1;
+        }
+
+        .contact-hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 60px 20px 50px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(0,212,255,0.08);
+            border: 1px solid rgba(0,212,255,0.3);
+            border-radius: 30px;
+            padding: 6px 22px;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #00d4ff;
+            text-shadow: 0 0 10px rgba(0,212,255,0.6);
+            margin-bottom: 22px;
+            animation: fadeSlideDown 0.8s ease both 0.2s;
+        }
+
+        @keyframes fadeSlideDown {
+            from { opacity: 0; transform: translateY(-18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .contact-hero-title {
+            font-size: clamp(2.2rem,5vw,4.5rem);
+            font-weight: 700;
+            font-family: Georgia, serif;
+            color: white;
+            line-height: 1.1;
+            margin-bottom: 18px;
+            animation: fadeSlideUp 0.9s ease both 0.35s;
+        }
+
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .contact-hero-title .glow-word {
+            color: #00d4ff;
+            text-shadow:
+                0 0 20px rgba(0,212,255,0.9),
+                0 0 40px rgba(0,150,255,0.6),
+                0 0 80px rgba(0,100,255,0.3);
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%,100% { text-shadow: 0 0 20px rgba(0,212,255,0.9), 0 0 40px rgba(0,150,255,0.6); }
+            50%      { text-shadow: 0 0 35px rgba(0,230,255,1),   0 0 65px rgba(0,180,255,0.8); }
+        }
+
+        .contact-hero-sub {
+            font-size: 15px;
+            color: rgba(170,200,255,0.75);
+            max-width: 520px;
+            margin: 0 auto;
+            line-height: 1.7;
+            animation: fadeSlideUp 1s ease both 0.5s;
+        }
+
+        .breadcrumb-bar {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            z-index: 2;
+            background: rgba(0,5,20,0.6);
+            border-top: 1px solid rgba(0,100,255,0.12);
+            padding: 12px 40px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: rgba(150,180,220,0.6);
+        }
+
+        .breadcrumb-bar a { color: #00d4ff; text-decoration: none; transition: 0.2s; }
+        .breadcrumb-bar a:hover { text-shadow: 0 0 8px rgba(0,212,255,0.7); }
+        .breadcrumb-bar i { font-size: 10px; color: rgba(0,212,255,0.4); }
+
+        #heroParticles { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+
+        #heroParticles span {
+            position: absolute;
+            display: block;
+            border-radius: 50%;
+            background: rgba(0,212,255,0.7);
+            box-shadow: 0 0 8px rgba(0,212,255,0.8);
+            animation: floatParticle linear infinite;
+        }
+
+        @keyframes floatParticle {
+            0%   { transform: translateY(100%) scale(0); opacity: 0; }
+            10%  { opacity: 1; }
+            90%  { opacity: 1; }
+            100% { transform: translateY(-120px) scale(1); opacity: 0; }
+        }
+
+        /* ===================================================
+           INFO CARDS
+        =================================================== */
+        #contact-info {
+            position: relative;
+            z-index: 1;
+            padding: 70px 40px 0;
+        }
+
+        .info-card {
+            background: rgba(8,15,40,0.85);
+            border-radius: 20px;
+            border: 1px solid rgba(0,100,255,0.2);
+            padding: 38px 28px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.4s, box-shadow 0.4s;
+            backdrop-filter: blur(10px);
+            height: 100%;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 21px;
+            background: linear-gradient(135deg, rgba(0,200,255,0), rgba(0,100,255,0.45), rgba(120,0,255,0));
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: -1;
+        }
+
+        .info-card:hover {
+            border-color: rgba(0,212,255,0.5);
+            box-shadow:
+                0 22px 55px rgba(0,0,0,0.5),
+                0 0 35px rgba(0,150,255,0.3),
+                0 0 70px rgba(0,100,255,0.12);
+        }
+
+        .info-card:hover::before { opacity: 1; }
+
+        .info-card .shine {
+            position: absolute;
+            top: 0; left: -100%;
+            width: 60%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+            transition: left 0.6s;
+            pointer-events: none;
+        }
+
+        .info-card:hover .shine { left: 150%; }
+
+        .info-icon-wrap {
+            width: 62px; height: 62px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(0,100,255,0.15), rgba(0,50,200,0.3));
+            border: 1px solid rgba(0,150,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #00d4ff;
+            margin: 0 auto 18px;
+            transition: all 0.4s;
+            box-shadow: 0 0 18px rgba(0,100,255,0.2);
+        }
+
+        .info-card:hover .info-icon-wrap {
+            box-shadow: 0 0 28px rgba(0,200,255,0.5), 0 0 55px rgba(0,150,255,0.3);
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .info-card h5 {
+            font-size: 15px;
+            font-weight: 600;
+            color: rgba(220,235,255,0.92);
+            margin-bottom: 8px;
+            font-family: Georgia, serif;
+            transition: 0.3s;
+        }
+
+        .info-card:hover h5 { color: #00d4ff; text-shadow: 0 0 10px rgba(0,212,255,0.4); }
+
+        .info-card p { font-size: 13px; color: rgba(150,180,220,0.7); line-height: 1.7; margin: 0; }
+        .info-card a { color: rgba(150,180,220,0.7); text-decoration: none; transition: 0.25s; }
+        .info-card a:hover { color: #00d4ff; text-shadow: 0 0 8px rgba(0,212,255,0.5); }
+
+        /* ===================================================
+           MAIN — FORM + MAP
+        =================================================== */
+        #contact-main {
+            position: relative;
+            z-index: 1;
+            padding: 70px 40px 100px;
+        }
+
+        .section-label {
+            font-size: 12px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #00d4ff;
+            text-shadow: 0 0 10px rgba(0,212,255,0.5);
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem,3.5vw,2.6rem);
+            font-weight: 700;
+            font-family: Georgia, serif;
+            color: white;
+            margin-bottom: 14px;
+            line-height: 1.2;
+        }
+
+        .section-title .accent { color: #00d4ff; }
+
+        .section-divider {
+            width: 70px; height: 2px;
+            background: linear-gradient(90deg, transparent, #00aaff, transparent);
+            margin: 0 0 36px;
+            box-shadow: 0 0 10px rgba(0,170,255,0.5);
+        }
+
+        /* ── Form Card ── */
+        .form-card {
+            background: rgba(8,15,40,0.88);
+            border-radius: 24px;
+            border: 1px solid rgba(0,100,255,0.2);
+            padding: 48px 44px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(14px);
+            box-shadow:
+                0 20px 60px rgba(0,0,0,0.45),
+                0 0 0 1px rgba(0,100,255,0.08);
+            transition: box-shadow 0.4s, border-color 0.4s;
+            height: 100%;
+        }
+
+        .form-card:hover {
+            box-shadow:
+                0 28px 70px rgba(0,0,0,0.55),
+                0 0 40px rgba(0,100,255,0.12);
+        }
+
+        .form-card .corner-tl,
+        .form-card .corner-br {
+            position: absolute;
+            width: 80px; height: 80px;
+            pointer-events: none;
+        }
+
+        .form-card .corner-tl {
+            top: 0; left: 0;
+            border-top: 2px solid rgba(0,212,255,0.4);
+            border-left: 2px solid rgba(0,212,255,0.4);
+            border-radius: 24px 0 0 0;
+        }
+
+        .form-card .corner-br {
+            bottom: 0; right: 0;
+            border-bottom: 2px solid rgba(0,212,255,0.4);
+            border-right: 2px solid rgba(0,212,255,0.4);
+            border-radius: 0 0 24px 0;
+        }
+
+        /* ── Form Labels ── */
+        .form-label-nova {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(0,212,255,0.75);
+            margin-bottom: 7px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .form-label-nova i { font-size: 11px; color: rgba(0,212,255,0.5); }
+
+        /* ── Inputs ── */
+        .nova-input {
+            width: 100%;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(0,100,255,0.25);
+            border-radius: 12px;
+            color: rgba(220,235,255,0.92);
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            padding: 13px 18px 13px 44px;
+            outline: none;
+            transition: all 0.35s;
+        }
+
+        .nova-input::placeholder { color: rgba(120,160,210,0.4); }
+
+        .nova-input:focus {
+            background: rgba(0,80,255,0.07);
+            border-color: rgba(0,212,255,0.55);
+            box-shadow:
+                0 0 0 3px rgba(0,212,255,0.08),
+                0 0 20px rgba(0,150,255,0.15),
+                inset 0 1px 0 rgba(255,255,255,0.04);
+            color: white;
+        }
+
+        .input-group-nova {
+            position: relative;
+            margin-bottom: 22px;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(0,170,255,0.45);
+            font-size: 14px;
+            pointer-events: none;
+            transition: 0.3s;
+            z-index: 2;
+        }
+
+        .input-icon.top-icon {
+            top: 18px;
+            transform: none;
+        }
+
+        .input-group-nova:focus-within .input-icon { color: #00d4ff; }
+
+        .input-glow {
+            position: absolute;
+            bottom: 0; left: 10%; right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+            box-shadow: 0 0 8px rgba(0,212,255,0.6);
+            opacity: 0;
+            transition: opacity 0.35s;
+            pointer-events: none;
+            border-radius: 50%;
+        }
+
+        .input-group-nova:focus-within .input-glow { opacity: 1; }
+
+        /* ── Submit Button ── */
+        .btn-submit {
+            width: 100%;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #0066ff, #0040cc);
+            color: white;
+            border: 1px solid rgba(0,150,255,0.4);
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 0.8px;
+            cursor: pointer;
+            transition: all 0.35s;
+            box-shadow:
+                0 0 25px rgba(0,100,255,0.4),
+                0 0 60px rgba(0,80,255,0.2),
+                inset 0 1px 0 rgba(255,255,255,0.12);
+            position: relative;
+            overflow: hidden;
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-submit::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 60%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn-submit:hover::before { left: 150%; }
+
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #0088ff, #0055ee);
+            box-shadow:
+                0 0 40px rgba(0,150,255,0.75),
+                0 0 80px rgba(0,100,255,0.4),
+                inset 0 1px 0 rgba(255,255,255,0.18);
+            transform: translateY(-3px) scale(1.01);
+            color: white;
+        }
+
+        .btn-submit:active { transform: translateY(0) scale(0.99); }
+
+        .btn-submit .btn-icon { margin-left: 8px; transition: transform 0.3s; display: inline-block; }
+        .btn-submit:hover .btn-icon { transform: translateX(4px); }
+
+        /* ── Right Panel ── */
+        .right-panel { display: flex; flex-direction: column; gap: 28px; }
+
+        /* ── Map Card ── */
+        .map-card {
+            background: rgba(8,15,40,0.88);
+            border-radius: 22px;
+            border: 1px solid rgba(0,100,255,0.2);
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+            transition: border-color 0.4s, box-shadow 0.4s;
+        }
+
+        .map-card:hover {
+            border-color: rgba(0,212,255,0.4);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(0,150,255,0.2);
+        }
+
+        .map-header {
+            padding: 16px 22px;
+            border-bottom: 1px solid rgba(0,100,255,0.14);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0,5,25,0.5);
+        }
+
+        .map-header i { color: #00d4ff; font-size: 15px; text-shadow: 0 0 10px rgba(0,212,255,0.5); }
+        .map-header span { font-size: 13px; font-weight: 600; color: rgba(200,220,255,0.85); letter-spacing: 0.5px; }
+
+        .map-dots { display: flex; gap: 6px; margin-left: auto; }
+        .map-dot  { width: 9px; height: 9px; border-radius: 50%; }
+        .map-dot.red    { background: rgba(255,80,80,0.6); }
+        .map-dot.yellow { background: rgba(255,200,60,0.6); }
+        .map-dot.green  { background: rgba(60,220,100,0.6); }
+
+        .map-card iframe {
+            display: block;
+            width: 100%;
+            height: 260px;
+            border: none;
+            filter: brightness(0.82) saturate(1.1) hue-rotate(180deg) invert(0.92);
+            transition: filter 0.4s;
+        }
+
+        .map-card:hover iframe { filter: brightness(0.9) saturate(1.2) hue-rotate(180deg) invert(0.9); }
+
+        .map-footer {
+            padding: 13px 22px;
+            background: rgba(0,5,25,0.5);
+            border-top: 1px solid rgba(0,100,255,0.1);
+            font-size: 12px;
+            color: rgba(120,160,210,0.6);
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .map-footer i { color: rgba(0,212,255,0.45); }
+
+        /* ── Social Card ── */
+        .social-card {
+            background: rgba(8,15,40,0.88);
+            border-radius: 22px;
+            border: 1px solid rgba(0,100,255,0.2);
+            padding: 30px 28px;
+            backdrop-filter: blur(14px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-card .corner-tl {
+            top:0; left:0; position:absolute;
+            width:60px; height:60px;
+            border-top:2px solid rgba(0,212,255,0.3);
+            border-left:2px solid rgba(0,212,255,0.3);
+            border-radius:22px 0 0 0;
+            pointer-events:none;
+        }
+
+        .social-card h5 {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #00d4ff;
+            text-shadow: 0 0 10px rgba(0,212,255,0.4);
+            margin-bottom: 18px;
+        }
+
+        .social-btn-row { display: flex; flex-wrap: wrap; gap: 10px; }
+
+        .social-btn {
+            flex: 1;
+            min-width: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            border: 1px solid transparent;
+            transition: all 0.3s;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-btn.fb  { background:rgba(24,119,242,0.12); border-color:rgba(24,119,242,0.3); color:#4f9cf9; }
+        .social-btn.ig  { background:rgba(225,48,108,0.1);  border-color:rgba(225,48,108,0.3); color:#f97096; }
+        .social-btn.tw  { background:rgba(29,155,240,0.1);  border-color:rgba(29,155,240,0.3); color:#5bc3f5; }
+        .social-btn.wa  { background:rgba(37,211,102,0.1);  border-color:rgba(37,211,102,0.3); color:#4cdc85; }
+
+        .social-btn.fb:hover { box-shadow:0 0 18px rgba(24,119,242,0.45); transform:translateY(-2px); }
+        .social-btn.ig:hover { box-shadow:0 0 18px rgba(225,48,108,0.4);  transform:translateY(-2px); }
+        .social-btn.tw:hover { box-shadow:0 0 18px rgba(29,155,240,0.4);  transform:translateY(-2px); }
+        .social-btn.wa:hover { box-shadow:0 0 18px rgba(37,211,102,0.4);  transform:translateY(-2px); }
+
+        /* ===================================================
+           FAQ
+        =================================================== */
+        #faq {
+            position: relative;
+            z-index: 1;
+            padding: 0 40px 90px;
+        }
+
+        .faq-card {
+            background: rgba(8,15,40,0.85);
+            border: 1px solid rgba(0,100,255,0.18);
+            border-radius: 16px;
+            margin-bottom: 14px;
+            overflow: hidden;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .faq-card.open {
+            border-color: rgba(0,212,255,0.35);
+            box-shadow: 0 0 25px rgba(0,150,255,0.15);
+        }
+
+        .faq-question {
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 20px 26px;
+            text-align: left;
+            color: rgba(210,230,255,0.88);
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            transition: color 0.3s;
+        }
+
+        .faq-card.open .faq-question { color: #00d4ff; text-shadow: 0 0 8px rgba(0,212,255,0.3); }
+
+        .faq-icon {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            border: 1px solid rgba(0,150,255,0.3);
+            display: flex; align-items: center; justify-content: center;
+            color: #00d4ff;
+            font-size: 13px;
+            flex-shrink: 0;
+            transition: all 0.35s;
+            box-shadow: 0 0 10px rgba(0,150,255,0.15);
+        }
+
+        .faq-card.open .faq-icon {
+            background: rgba(0,150,255,0.15);
+            box-shadow: 0 0 18px rgba(0,212,255,0.4);
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.42s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        .faq-answer-inner {
+            padding: 16px 26px 20px;
+            font-size: 13px;
+            color: rgba(140,175,220,0.72);
+            line-height: 1.8;
+            border-top: 1px solid rgba(0,100,255,0.1);
+        }
+
+        /* ===================================================
+           SCROLL REVEAL
+        =================================================== */
+        .reveal       { opacity:0; transform:translateY(36px); transition:opacity 0.7s ease,transform 0.7s ease; }
+        .reveal-left  { opacity:0; transform:translateX(-36px); transition:opacity 0.7s ease,transform 0.7s ease; }
+        .reveal-right { opacity:0; transform:translateX(36px); transition:opacity 0.7s ease,transform 0.7s ease; }
+        .reveal.visible, .reveal-left.visible, .reveal-right.visible { opacity:1; transform:none; }
+
+        /* ===================================================
+           FOOTER
+        =================================================== */
+        #footer {
+            position: relative;
+            z-index: 1;
+            background: rgba(0,5,20,0.95);
+            border-top: 1px solid rgba(0,100,255,0.2);
+            padding-top: 70px;
+        }
+
+        .footer-glow-bar {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00aaff, #0044ff, #00aaff, transparent);
+            box-shadow: 0 0 15px rgba(0,170,255,0.4);
+        }
+
+        .footer-brand {
+            font-size: 36px;
+            font-weight: 700;
+            font-family: Georgia, serif;
+            color: white;
+            letter-spacing: 4px;
+            text-shadow: 0 0 15px rgba(0,200,255,0.8), 0 0 40px rgba(0,150,255,0.5);
+            margin-bottom: 14px;
+            display: block;
+            text-decoration: none;
+            animation: logoPulse 3s ease-in-out infinite;
+        }
+
+        .footer-tagline { font-size:13px; color:rgba(150,180,220,0.6); line-height:1.7; margin-bottom:24px; }
+
+        .footer-socials { display:flex; gap:10px; flex-wrap:wrap; }
+
+        .footer-social-btn {
+            width:40px; height:40px; border-radius:50%;
+            background:rgba(255,255,255,0.05);
+            border:1px solid rgba(0,150,255,0.25);
+            color:rgba(180,210,255,0.7);
+            display:flex; align-items:center; justify-content:center;
+            font-size:14px; text-decoration:none; transition:all 0.3s;
+        }
+
+        .footer-social-btn:hover {
+            background:rgba(0,150,255,0.15);
+            border-color:rgba(0,212,255,0.5);
+            color:#00d4ff;
+            box-shadow:0 0 20px rgba(0,212,255,0.4),0 0 40px rgba(0,150,255,0.2);
+            transform:translateY(-3px) scale(1.1);
+        }
+
+        .footer-heading {
+            font-size:12px; font-weight:600; letter-spacing:3px;
+            text-transform:uppercase; color:#00d4ff;
+            text-shadow:0 0 10px rgba(0,212,255,0.5);
+            margin-bottom:20px; padding-bottom:10px;
+            border-bottom:1px solid rgba(0,212,255,0.15);
+        }
+
+        .footer-link {
+            display:block; color:rgba(150,180,220,0.65);
+            text-decoration:none; font-size:14px;
+            padding:6px 0; transition:all 0.25s;
+            border-bottom:1px solid rgba(0,100,255,0.06);
+        }
+
+        .footer-link:hover { color:#00d4ff; text-shadow:0 0 8px rgba(0,212,255,0.5); padding-left:8px; }
+
+        .footer-newsletter-input {
+            background:rgba(255,255,255,0.05);
+            border:1px solid rgba(0,150,255,0.3);
+            color:white; border-radius:12px 0 0 12px;
+            padding:10px 16px; font-size:13px; outline:none; width:100%;
+        }
+
+        .footer-newsletter-input::placeholder { color:rgba(150,190,255,0.4); }
+        .footer-newsletter-input:focus { border-color:rgba(0,212,255,0.5); box-shadow:0 0 15px rgba(0,212,255,0.15); }
+
+        .footer-newsletter-btn {
+            background:linear-gradient(135deg,#0066ff,#0040cc);
+            color:white; border:none; border-radius:0 12px 12px 0;
+            padding:10px 18px; font-size:13px; font-weight:600;
+            cursor:pointer; transition:all 0.3s; white-space:nowrap;
+            box-shadow:0 0 15px rgba(0,100,255,0.3);
+        }
+
+        .footer-newsletter-btn:hover { box-shadow:0 0 25px rgba(0,150,255,0.6); transform:scale(1.02); }
+
+        .footer-bottom {
+            margin-top:60px; padding:22px 40px;
+            border-top:1px solid rgba(0,100,255,0.12);
+            display:flex; justify-content:space-between;
+            align-items:center; flex-wrap:wrap; gap:12px;
+        }
+
+        .footer-bottom p { font-size:13px; color:rgba(120,160,210,0.55); margin:0; }
+        .footer-bottom a { color:rgba(0,212,255,0.6); text-decoration:none; transition:0.2s; }
+        .footer-bottom a:hover { color:#00d4ff; }
+
+        /* ===================================================
+           RESPONSIVE
+        =================================================== */
+        @media (max-width:992px) {
+            .dropdown-menu { width:100%; flex-direction:column; }
+            .dropdown-menu.show { gap:15px; }
+            #contact-info { padding:50px 20px 0; }
+            #contact-main { padding:50px 20px 70px; }
+            #faq { padding:0 20px 70px; }
+        }
+
+        @media (max-width:768px) {
+            .contact-hero-title { font-size:2rem; }
+            .form-card { padding:32px 22px; }
+            .breadcrumb-bar { padding:10px 20px; }
+            .footer-bottom { flex-direction:column; text-align:center; }
+        }
+
+        @media (max-width:576px) {
+            .navbar { padding:12px 16px; }
+            .social-btn-row { flex-direction:column; }
+            .footer-bottom { padding:20px 16px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">NOVA</a>
+            <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="nav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+
+                    <li class="nav-item dropdown position-static">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" style="cursor:pointer;">Men</a>
+                        <div class="dropdown-menu">
+                            <div class="mega-column">
+                                <h6>Clothing</h6>
+                                <a class="custom-link" href="{% url 'product_page' 'Men' 'Tshirt' %}">T-Shirts</a>
+                                <a class="custom-link" href="{% url 'product_page' 'Men' 'Shirt' %}">Shirts</a>
+                                <a class="custom-link" href="{% url 'product_page' 'Men' 'Jeans' %}">Jeans</a>
+                            </div>
+                            <div class="mega-column">
+                                <h6>Accessories</h6>
+                                <a class="custom-link" href="#">Watches</a>
+                                <a class="custom-link" href="#">Perfumes</a>
+                            </div>
+                            <div class="mega-img">
+                                <img src="https://i0.wp.com/peacockblue.co.za/wp-content/uploads/2020/04/pb-stellenbosch-003.jpg" alt="Men">
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown position-static">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" style="cursor:pointer;">Women</a>
+                        <div class="dropdown-menu">
+                            <div class="mega-column">
+                                <h6>Clothing</h6>
+                                <a class="custom-link" href="{% url 'product_page' 'Women' 'Dresses' %}">Dresses</a>
+                                <a class="custom-link" href="{% url 'product_page' 'Women' 'Tops' %}">Tops</a>
+                            </div>
+                            <div class="mega-column">
+                                <h6>Accessories</h6>
+                                <a class="custom-link" href="#">Bags</a>
+                                <a class="custom-link" href="#">Jewellery</a>
+                            </div>
+                            <div class="mega-img">
+                                <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d" alt="Women">
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown position-static">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" style="cursor:pointer;">Kids</a>
+                        <div class="dropdown-menu">
+                            <div class="mega-column">
+                                <h6>Categories</h6>
+                                <a class="custom-link" href="{% url 'product_page' 'Kids' 'Kidswear' %}">Clothes</a>
+                                <a class="custom-link" href="{% url 'product_page' 'Kids' 'Toys' %}">Toys</a>
+                            </div>
+                            <div class="mega-img">
+                                <img src="https://thebestoflkn.com/wp-content/uploads/2025/01/airlie-baby-birkdale-village-02.jpg" alt="Kids">
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                    <li class="nav-item"><a class="nav-link active-page" href="/contact">Contact</a></li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-2">
+                    <form class="d-flex" method="GET" action="{% url 'search_products' %}">
+                        <input type="search" name="q" class="form-control form-control-sm search-box" placeholder="Search...">
+                        <button class="btn-glow-light btn-sm ms-1" type="submit">🔍</button>
+                    </form>
+                    <a href="{% url 'wishlist_view' %}" class="btn-glow-light btn-sm">❤️</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'dashboard' %}" class="btn-glow-light btn-sm">{{ user.username }}</a>
+                        <a href="/logout" class="btn-glow-danger btn-sm">Logout</a>
+                    {% else %}
+                        <a href="{% url 'signin' %}" class="btn-glow-primary btn-sm">Sign In</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===================================================
+         HERO
+    =================================================== -->
+    <section id="contact-hero">
+        <div class="contact-hero-bg"></div>
+        <div id="heroParticles"></div>
+        <div class="contact-hero-content">
+            <div class="hero-badge">✦ Get In Touch</div>
+            <h1 class="contact-hero-title">Contact <span class="glow-word">NOVA</span></h1>
+            <p class="contact-hero-sub">Have a question, feedback, or just want to say hello? We'd love to hear from you. Our team is ready to help.</p>
+        </div>
+        <div class="breadcrumb-bar">
+            <a href="/">Home</a>
+            <i class="fas fa-chevron-right"></i>
+            <span style="color:rgba(0,212,255,0.7);">Contact</span>
+        </div>
+    </section>
+
+    <!-- ===================================================
+         INFO CARDS
+    =================================================== -->
+    <section id="contact-info">
+        <div class="container-fluid px-lg-5">
+            <div class="row g-4">
+
+                <div class="col-lg-3 col-md-6 reveal" style="transition-delay:0.05s">
+                    <div class="info-card">
+                        <div class="shine"></div>
+                        <div class="info-icon-wrap"><i class="fas fa-map-marker-alt"></i></div>
+                        <h5>Our Location</h5>
+                        <p>42 Nova Tower, Bandra West<br>Mumbai, Maharashtra 400050<br>India</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 reveal" style="transition-delay:0.15s">
+                    <div class="info-card">
+                        <div class="shine"></div>
+                        <div class="info-icon-wrap"><i class="fas fa-phone-alt"></i></div>
+                        <h5>Phone &amp; WhatsApp</h5>
+                        <p>
+                            <a href="tel:+919876543210">+91 98765 43210</a><br>
+                            <a href="tel:+911122334455">+91 11223 34455</a><br>
+                            <span style="font-size:11px;color:rgba(0,212,255,0.5);">Mon – Sat, 9am – 7pm</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 reveal" style="transition-delay:0.25s">
+                    <div class="info-card">
+                        <div class="shine"></div>
+                        <div class="info-icon-wrap"><i class="fas fa-envelope"></i></div>
+                        <h5>Email Us</h5>
+                        <p>
+                            <a href="mailto:hello@nova.in">hello@nova.in</a><br>
+                            <a href="mailto:support@nova.in">support@nova.in</a><br>
+                            <span style="font-size:11px;color:rgba(0,212,255,0.5);">Reply within 24 hours</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 reveal" style="transition-delay:0.35s">
+                    <div class="info-card">
+                        <div class="shine"></div>
+                        <div class="info-icon-wrap"><i class="fas fa-clock"></i></div>
+                        <h5>Working Hours</h5>
+                        <p>
+                            Mon – Fri: 9:00 AM – 7:00 PM<br>
+                            Saturday: 10:00 AM – 5:00 PM<br>
+                            <span style="font-size:11px;color:rgba(0,212,255,0.5);">Sunday: Closed</span>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================================
+         MAIN — FORM + MAP (side by side)
+    =================================================== -->
+    <section id="contact-main">
+        <div class="container-fluid px-lg-5">
+
+            <div class="row g-5 align-items-start">
+
+                <!-- ── LEFT: FORM ── -->
+                <div class="col-lg-7 reveal-left">
+                    <div class="section-label">Send a Message</div>
+                    <h2 class="section-title">Let's <span class="accent">Talk</span></h2>
+                    <div class="section-divider"></div>
+
+                    <div class="form-card">
+                        <div class="corner-tl"></div>
+                        <div class="corner-br"></div>
+
+                        <form method="POST">
+                            {% csrf_token %}
+
+                            <div class="row g-0">
+
+                                <!-- First Name -->
+                                <div class="col-md-6 pe-md-2">
+                                    <label class="form-label-nova"><i class="fas fa-user"></i> First Name</label>
+                                    <div class="input-group-nova">
+                                        <i class="fas fa-user input-icon"></i>
+                                        <input type="text" name="first_name" class="nova-input" placeholder="John" required>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Last Name -->
+                                <div class="col-md-6 ps-md-2">
+                                    <label class="form-label-nova"><i class="fas fa-user"></i> Last Name</label>
+                                    <div class="input-group-nova">
+                                        <i class="fas fa-user input-icon"></i>
+                                        <input type="text" name="last_name" class="nova-input" placeholder="Doe" required>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Email -->
+                                <div class="col-12">
+                                    <label class="form-label-nova"><i class="fas fa-envelope"></i> Email Address</label>
+                                    <div class="input-group-nova">
+                                        <i class="fas fa-envelope input-icon"></i>
+                                        <input type="email" name="email" class="nova-input" placeholder="john@gmail.com" required>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Phone -->
+                                <div class="col-md-6 pe-md-2">
+                                    <label class="form-label-nova"><i class="fas fa-phone-alt"></i> Phone Number</label>
+                                    <div class="input-group-nova">
+                                        <i class="fas fa-phone-alt input-icon"></i>
+                                        <input type="text" name="phone" class="nova-input" placeholder="+91 9876543210" required>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Username -->
+                                <div class="col-md-6 ps-md-2">
+                                    <label class="form-label-nova"><i class="fas fa-at"></i> Username</label>
+                                    <div class="input-group-nova">
+                                        <i class="fas fa-at input-icon"></i>
+                                        <input type="text" name="username" class="nova-input" placeholder="@johndoe" required>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Subject -->
+                                <div class="col-12">
+                                    <label class="form-label-nova"><i class="fas fa-tag"></i> Subject</label>
+                                    <div class="input-group-nova">
+                                        <i class="fas fa-tag input-icon"></i>
+                                        <input type="text" name="subject" class="nova-input" placeholder="How can we help you?" required>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Message -->
+                                <div class="col-12">
+                                    <label class="form-label-nova"><i class="fas fa-comment-dots"></i> Message</label>
+                                    <div class="input-group-nova">
+                                        <i class="fas fa-comment-dots input-icon top-icon"></i>
+                                        <textarea name="message" class="nova-input" rows="4"
+                                            placeholder="Tell us what's on your mind..."
+                                            style="padding-top:13px; resize:vertical;" required></textarea>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Submit -->
+                                <div class="col-12">
+                                    <button type="submit" class="btn-submit" id="submitBtn">
+                                        Send Message
+                                        <span class="btn-icon"><i class="fas fa-paper-plane"></i></span>
+                                    </button>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ── RIGHT: MAP + SOCIAL ── -->
+                <div class="col-lg-5 reveal-right">
+                    <div class="right-panel">
+
+                        <!-- Map Card -->
+                        <div class="map-card">
+                            <div class="map-header">
+                                <i class="fas fa-map-marked-alt"></i>
+                                <span>NOVA Headquarters</span>
+                                <div class="map-dots">
+                                    <div class="map-dot red"></div>
+                                    <div class="map-dot yellow"></div>
+                                    <div class="map-dot green"></div>
+                                </div>
+                            </div>
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3771.7527953788357!2d72.82640431490077!3d19.05089158711553!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c9b888ae67fd%3A0x1d4a60e5b0218d63!2sBandra%20West%2C%20Mumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1680000000000!5m2!1sen!2sin"
+                                allowfullscreen="" loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"
+                                title="NOVA Location">
+                            </iframe>
+                            <div class="map-footer">
+                                <i class="fas fa-location-arrow"></i>
+                                42 Nova Tower, Bandra West, Mumbai 400050
+                            </div>
+                        </div>
+
+                        <!-- Social Card -->
+                        <div class="social-card">
+                            <div class="corner-tl"></div>
+                            <h5><i class="fas fa-satellite-dish" style="margin-right:8px;"></i>Connect With Us</h5>
+                            <div class="social-btn-row">
+                                <a href="#" class="social-btn fb"><i class="fab fa-facebook-f"></i> Facebook</a>
+                                <a href="#" class="social-btn ig"><i class="fab fa-instagram"></i> Instagram</a>
+                                <a href="#" class="social-btn tw"><i class="fab fa-twitter"></i> Twitter</a>
+                                <a href="#" class="social-btn wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================================
+         FAQ
+    =================================================== -->
+    <section id="faq">
+        <div class="container-fluid px-lg-5">
+            <div class="text-center mb-5 reveal">
+                <div class="section-label">FAQ</div>
+                <h2 class="section-title">Common <span class="accent">Questions</span></h2>
+                <div class="section-divider" style="margin:0 auto;"></div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+
+                    <div class="faq-card reveal" style="transition-delay:0.05s">
+                        <button class="faq-question">How long does delivery take? <span class="faq-icon"><i class="fas fa-plus"></i></span></button>
+                        <div class="faq-answer"><div class="faq-answer-inner">Standard delivery takes 3–5 business days across India. Express delivery (1–2 days) is available at checkout for most pin codes. International orders ship within 7–14 business days.</div></div>
+                    </div>
+
+                    <div class="faq-card reveal" style="transition-delay:0.12s">
+                        <button class="faq-question">What is your return and refund policy? <span class="faq-icon"><i class="fas fa-plus"></i></span></button>
+                        <div class="faq-answer"><div class="faq-answer-inner">We offer a hassle-free 30-day return policy. Refunds are processed within 5–7 business days of us receiving the item.</div></div>
+                    </div>
+
+                    <div class="faq-card reveal" style="transition-delay:0.19s">
+                        <button class="faq-question">How can I track my order? <span class="faq-icon"><i class="fas fa-plus"></i></span></button>
+                        <div class="faq-answer"><div class="faq-answer-inner">Once your order ships, you'll receive a tracking number via email and SMS. You can also visit "My Orders" in your NOVA account for real-time updates.</div></div>
+                    </div>
+
+                    <div class="faq-card reveal" style="transition-delay:0.26s">
+                        <button class="faq-question">Are the products on NOVA authentic? <span class="faq-icon"><i class="fas fa-plus"></i></span></button>
+                        <div class="faq-answer"><div class="faq-answer-inner">Absolutely. Every product is 100% authentic and sourced directly from authorized brand distributors. We have a strict zero-tolerance policy for counterfeit goods.</div></div>
+                    </div>
+
+                    <div class="faq-card reveal" style="transition-delay:0.33s">
+                        <button class="faq-question">What payment methods do you accept? <span class="faq-icon"><i class="fas fa-plus"></i></span></button>
+                        <div class="faq-answer"><div class="faq-answer-inner">We accept all major credit/debit cards, UPI (GPay, PhonePe, Paytm), Net Banking, EMI options, and Cash on Delivery. All transactions are SSL encrypted.</div></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================================
+         FOOTER
+    =================================================== -->
+    <footer id="footer">
+        <div class="footer-glow-bar"></div>
+        <div class="container-fluid px-lg-5 pt-4">
+            <div class="row g-5">
+
+                <div class="col-lg-4">
+                    <a class="footer-brand" href="#">NOVA</a>
+                    <p class="footer-tagline">Curating the finest in fashion, accessories, and home essentials since 2018. Excellence delivered to your door.</p>
+                    <div class="footer-socials">
+                        <a href="#" class="footer-social-btn"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="footer-social-btn"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="footer-social-btn"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="footer-social-btn"><i class="fab fa-pinterest-p"></i></a>
+                        <a href="#" class="footer-social-btn"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-4 col-6">
+                    <div class="footer-heading">Quick Links</div>
+                    <a href="/" class="footer-link">Home</a>
+                    <a href="/about" class="footer-link">About Us</a>
+                    <a href="#" class="footer-link">Shop Men</a>
+                    <a href="#" class="footer-link">Shop Women</a>
+                    <a href="#" class="footer-link">Shop Kids</a>
+                    <a href="/contact" class="footer-link">Contact</a>
+                </div>
+
+                <div class="col-lg-2 col-md-4 col-6">
+                    <div class="footer-heading">Support</div>
+                    <a href="#" class="footer-link">FAQs</a>
+                    <a href="#" class="footer-link">Shipping Policy</a>
+                    <a href="#" class="footer-link">Return Policy</a>
+                    <a href="#" class="footer-link">Size Guide</a>
+                    <a href="#" class="footer-link">Track Order</a>
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                </div>
+
+                <div class="col-lg-4 col-md-4">
+                    <div class="footer-heading">Newsletter</div>
+                    <p style="font-size:13px;color:rgba(150,180,220,0.6);margin-bottom:16px;line-height:1.6;">Subscribe to get exclusive offers, early access to new arrivals, and curated style inspiration.</p>
+                    <div class="d-flex">
+                        <input type="email" class="footer-newsletter-input" placeholder="Your email address">
+                        <button class="footer-newsletter-btn">Subscribe</button>
+                    </div>
+                    <div class="mt-3 d-flex align-items-center gap-2">
+                        <i class="fas fa-shield-alt" style="color:#00d4ff;font-size:13px;"></i>
+                        <span style="font-size:12px;color:rgba(120,160,200,0.5);">No spam. Unsubscribe anytime.</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 <a href="#">NOVA</a>. All rights reserved. Crafted with ❤️ in India.</p>
+            <p>
+                <a href="#">Terms</a> &nbsp;·&nbsp;
+                <a href="#">Privacy</a> &nbsp;·&nbsp;
+                <a href="#">Cookies</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- ===================================================
+         SCRIPTS
+    =================================================== -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+    $(document).ready(function () {
+
+        /* ── Hero particles ── */
+        for (var i = 0; i < 22; i++) {
+            var size = Math.random() * 4 + 1.5;
+            $('<span>').css({
+                left:              (Math.random() * 100) + '%',
+                width:             size + 'px',
+                height:            size + 'px',
+                animationDuration: (Math.random() * 10 + 7) + 's',
+                animationDelay:    '-' + (Math.random() * 6) + 's',
+                opacity:           Math.random() * 0.7 + 0.3
+            }).appendTo('#heroParticles');
+        }
+
+        /* ── Scroll reveal ── */
+        function checkReveal() {
+            var wh = $(window).height();
+            var st = $(window).scrollTop();
+            $('.reveal, .reveal-left, .reveal-right').each(function () {
+                if ($(this).offset().top < st + wh - 70) {
+                    $(this).addClass('visible');
+                }
+            });
+        }
+        $(window).on('scroll', checkReveal);
+        checkReveal();
+
+        /* ── Sticky navbar shadow ── */
+        $(window).on('scroll', function () {
+            if ($(this).scrollTop() > 50) {
+                $('.navbar').css('box-shadow', '0 4px 30px rgba(0,100,255,0.25),0 0 80px rgba(0,80,255,0.1)');
+            } else {
+                $('.navbar').css('box-shadow', '0 2px 20px rgba(0,100,255,0.15),0 0 60px rgba(0,80,255,0.08)');
+            }
+        });
+
+        /* ── 3D tilt on cards ── */
+        function applyTilt(sel) {
+            $(sel).on('mousemove', function (e) {
+                var rect = this.getBoundingClientRect();
+                var rotX = (((e.clientY - rect.top)  / rect.height) - 0.5) * -10;
+                var rotY = (((e.clientX - rect.left) / rect.width)  - 0.5) *  10;
+                $(this).css('transform',
+                    'perspective(900px) rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg) translateY(-8px) scale(1.02)');
+            }).on('mouseleave', function () {
+                $(this).css({
+                    transform: '',
+                    transition: 'transform 0.5s cubic-bezier(0.175,0.885,0.32,1.275), border-color 0.4s, box-shadow 0.4s'
+                });
+                var $s = $(this);
+                setTimeout(function () { $s.css('transition', ''); }, 500);
+            });
+        }
+
+        applyTilt('.info-card');
+        applyTilt('.map-card');
+        /* Note: form-card tilt is intentionally mild to avoid UX issues while typing */
+        $('.form-card').on('mousemove', function (e) {
+            var rect = this.getBoundingClientRect();
+            var rotX = (((e.clientY - rect.top)  / rect.height) - 0.5) * -3;
+            var rotY = (((e.clientX - rect.left) / rect.width)  - 0.5) *  3;
+            $(this).css('transform',
+                'perspective(1200px) rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)');
+        }).on('mouseleave', function () {
+            $(this).css({
+                transform: '',
+                transition: 'transform 0.5s cubic-bezier(0.175,0.885,0.32,1.275)'
+            });
+            var $s = $(this);
+            setTimeout(function () { $s.css('transition', ''); }, 500);
+        });
+
+        /* ── Submit button success state ── */
+        $('#submitBtn').on('click', function (e) {
+            /* Only fire the visual if the native HTML5 validation passes.
+               Django form submission happens normally via POST. */
+            var allValid = true;
+            $(this).closest('form').find('[required]').each(function () {
+                if ($(this).val().trim() === '') { allValid = false; }
+            });
+            if (!allValid) return;
+
+            var $btn = $(this);
+            $btn.html('Sending... <span class="btn-icon"><i class="fas fa-spinner fa-spin"></i></span>');
+        });
+
+        /* ── FAQ accordion ── */
+        $('.faq-question').on('click', function () {
+            var $card   = $(this).closest('.faq-card');
+            var $answer = $card.find('.faq-answer');
+            var isOpen  = $card.hasClass('open');
+
+            $('.faq-card').removeClass('open').find('.faq-answer').css('max-height', '0');
+
+            if (!isOpen) {
+                $card.addClass('open');
+                $answer.css('max-height', $answer[0].scrollHeight + 60 + 'px');
+            }
+        });
+
+        /* ── Newsletter ── */
+        $('.footer-newsletter-btn').on('click', function () {
+            var $input = $(this).prev('input');
+            var email  = $input.val().trim();
+            if (!email || !email.includes('@')) {
+                $input.css('border-color', 'rgba(255,50,80,0.6)');
+                setTimeout(function () { $input.css('border-color', ''); }, 2000);
+                return;
+            }
+            $(this).text('✓ Subscribed!').prop('disabled', true)
+                   .css({ background:'linear-gradient(135deg,#00aa55,#007733)', boxShadow:'0 0 20px rgba(0,200,100,0.4)' });
+            $input.val('').prop('disabled', true);
+        });
+
+        /* ── Smooth scroll ── */
+        $('a[href^="#"]').on('click', function (e) {
+            var target = $(this.getAttribute('href'));
+            if (target.length) {
+                e.preventDefault();
+                $('html, body').animate({ scrollTop: target.offset().top - 80 }, 700);
+            }
+        });
+
+    });
+    </script>
+
+</body>
+</html>
