@@ -562,7 +562,7 @@ def order_page(request):
     # SAVE TOTAL IN SESSION
     request.session['final_total'] = float(final_total)
 
-    return render(request, 'OrderPage.html', {
+    return render(request, 'orderpage.html', {
         'cart_items': cart_items,
         'subtotal': subtotal,
         'discount': discount,
